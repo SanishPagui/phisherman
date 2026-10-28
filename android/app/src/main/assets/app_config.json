@@ -1,0 +1,8 @@
+{
+  "version": "cfg-1",
+  "portalUrl": "https://cybercrime.gov.in",
+  "helplineNumber": "1930",
+  "biasMaxShift": 0.15,
+  "biasClampMin": 0.05,
+  "biasClampMax": 0.95
+}

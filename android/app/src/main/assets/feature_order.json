@@ -1,0 +1,23 @@
+{
+  "version": "link-1",
+  "order": [
+    "url_len",
+    "host_len",
+    "dot_count",
+    "subdomain_depth",
+    "digit_ratio",
+    "hyphen_count_host",
+    "special_chars",
+    "has_at",
+    "has_ip_host",
+    "is_https",
+    "host_entropy",
+    "is_shortener",
+    "susp_words",
+    "path_len",
+    "num_params",
+    "brand_min_lev",
+    "brand_in_subdomain",
+    "tld_risk"
+  ]
+}

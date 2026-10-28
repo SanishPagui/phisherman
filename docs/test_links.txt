@@ -1,0 +1,24 @@
+LINK TEST MATRIX (PS4 §13.2). Defanged below; un-defang (hxxp→http, [.]→.) when sending
+to your demo phone. Uses non-resolving .example domains and made-up "examplebank" — NEVER
+test with real active phishing links or imitate a real brand to other people.
+
+ID  Expected                      URL (defanged)
+L1  DANGEROUS (brand lookalike)   hxxps://examplebank-kyc-update[.]example/login
+L2  DANGEROUS/SUSPICIOUS (IP)     hxxp://203[.]0[.]113[.]10/verify/account
+L3  SUSPICIOUS+ (@ in URL)        hxxps://examplebank[.]com@login-check[.]example/
+L4  DANGEROUS (deep nesting)      hxxps://login[.]secure[.]examplebank[.]com[.]attacker[.]example/
+L5  SUSPICIOUS (shortener)        hxxps://bit[.]ly/3xampLe
+L6  SAFE (forwarded silently)     https://www[.]wikipedia[.]org/
+L7  SAFE (allowlist)              https://www[.]hdfcbank[.]com/
+L8  SAFE (hard negative)          https://www[.]amazon[.]in/gp/css/order-history?ref_=nav_orders
+L9  SUSPICIOUS+ (typo of brand)   hxxps://paytrn[.]example/
+L10 Ignored by router             tel:1930
+
+SMS TEST SET (paste into the home paste box, or send as SMS):
+S1 DANGEROUS  "Your account will be blocked today. Update KYC at <link>" (from a 10-digit number)
+S2 SAFE       "Your OTP is 123456. Do not share with anyone." (bank-style sender)
+S3 SAFE       "Debit alert: Rs 500 spent at a shop" (no link)
+S4 SUSP/DANG  "Congratulations! You won a reward. Claim now at <link>"
+S5 SAFE       "Big sale this weekend, 40% off" (promotional)
+S6 DANGEROUS  "Aapka khata band ho jayega, turant KYC update karein <link>"
+S7 DANGEROUS  "Share the OTP you received to confirm delivery" (OTP-ask rule)

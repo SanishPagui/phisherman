@@ -1,0 +1,35 @@
+name: ml-pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  ml:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ml
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Generate synthetic data
+        run: python gen_data.py
+      - name: Feature unit tests
+        run: python test_features.py
+      - name: Train link model (+ ONNX parity self-check)
+        run: python train_link.py
+      - name: Train SMS model
+        run: python train_sms.py
+      - name: SMS reconstruction parity vs scikit-learn
+        run: python verify_sms_parity.py
+      - name: Build results + parity fixtures
+        run: |
+          python eval_report.py
+          python make_parity.py
+          python make_sms_parity.py

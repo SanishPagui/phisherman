@@ -1,0 +1,34 @@
+VOICE DEMO — 40-SECOND SCAM-CALL SCRIPT (read from a second phone near the demo phone)
+
+Do NOT use a real person's identity or a real bank name as an actual threat to a real
+number. This is a synthetic script for a prototype. Natural order: greeting + authority
+claim → threat → app install → OTP → payment demand. Expect the meter to cross AMBER early
+and hit RED before the payment demand.
+
+--------------------------------------------------------------------------------
+"Hello, I am calling from the bank's fraud department. This is an officer speaking.
+
+We have detected a suspicious transaction on your account and your account will be
+blocked within two hours if we cannot verify it.
+
+To fix this, please install the AnyDesk app from the link we send so we can check your
+screen.
+
+I also need the OTP you just received to confirm your identity — please read it out.
+
+Finally, to keep your money safe, transfer the balance to the secure verification
+account I give you now."
+--------------------------------------------------------------------------------
+
+NORMAL-CALL CONTROL SCRIPT (must stay GREEN):
+"Hi, are you free this evening? The delivery is arriving around six, please keep the gate
+open. Also mum said dinner is ready, so come home early. See you soon."
+
+CUSTOMER-CARE CONTROL (mentions OTP once; should stay green or at most amber):
+"I am calling my own bank's helpline about a failed payment. They said an OTP was sent to
+confirm the refund, but I did not share it with anyone."
+
+HOW TO USE IN THE APP:
+- Live: tap "Start call guard", grant the mic + notification permission, play the script.
+- Reliable fallback (recommended for the stage): type/paste each line into the call-guard
+  text box and tap "Add line" — the same VoiceAnalyser scores it. (PS4 §9.4/§9.5)
