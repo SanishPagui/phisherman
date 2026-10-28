@@ -1,0 +1,172 @@
+{
+  "version": "voice-1",
+  "note": "Hand-set starting priors (PS4 Section 9.3), NOT learned values. Tune on your own scripts and normal conversations and record the result. Each category counts once per rolling window.",
+  "windowSeconds": 60,
+  "bands": {
+    "suspicious": 40,
+    "dangerous": 70
+  },
+  "categories": [
+    {
+      "id": "credential_request",
+      "label": "Asked for OTP / PIN / card details",
+      "labelHi": "OTP / PIN / कार्ड विवरण माँगा गया",
+      "weight": 40,
+      "patterns": [
+        "otp",
+        "o t p",
+        "one time password",
+        "pin number",
+        "pin batao",
+        "pin bataiye",
+        "cvv",
+        "card number",
+        "card ka number",
+        "password",
+        "atm pin",
+        "net banking password",
+        "otp batao",
+        "otp bataiye",
+        "code bataiye",
+        "verification code"
+      ]
+    },
+    {
+      "id": "remote_access",
+      "label": "Asked to install a screen-sharing app",
+      "labelHi": "स्क्रीन-शेयर ऐप इंस्टॉल करने को कहा",
+      "weight": 35,
+      "patterns": [
+        "anydesk",
+        "teamviewer",
+        "quicksupport",
+        "any desk",
+        "team viewer",
+        "screen share",
+        "screen sharing",
+        "screen share karo",
+        "share your screen",
+        "install the app",
+        "app install karo",
+        "download the app"
+      ]
+    },
+    {
+      "id": "payment_demand",
+      "label": "Asked to transfer money or pay a fee",
+      "labelHi": "पैसे ट्रांसफर या शुल्क भरने को कहा",
+      "weight": 25,
+      "patterns": [
+        "transfer",
+        "send money",
+        "paise bhejo",
+        "paise transfer",
+        "verification fee",
+        "safe account",
+        "secure account",
+        "challan",
+        "challan bharo",
+        "fine bharo",
+        "processing fee",
+        "refund ke liye",
+        "pay now",
+        "payment karo",
+        "verification account",
+        "secure verification account",
+        "transfer the balance",
+        "move your money",
+        "deposit"
+      ]
+    },
+    {
+      "id": "authority_claim",
+      "label": "Claims to be bank / police / government",
+      "labelHi": "बैंक / पुलिस / सरकार होने का दावा",
+      "weight": 20,
+      "patterns": [
+        "police",
+        "cbi",
+        "customs",
+        "rbi",
+        "bank manager",
+        "trai",
+        "income tax",
+        "cyber cell",
+        "officer bol raha",
+        "police station",
+        "court",
+        "arrest warrant",
+        "enforcement directorate",
+        "ed officer",
+        "narcotics",
+        "fraud department",
+        "officer speaking",
+        "calling from the bank",
+        "from the bank",
+        "bank official",
+        "this is an officer",
+        "am an officer"
+      ]
+    },
+    {
+      "id": "threat_urgency",
+      "label": "Threat or pressure to act now",
+      "labelHi": "धमकी या तुरंत कार्रवाई का दबाव",
+      "weight": 20,
+      "patterns": [
+        "arrest",
+        "warrant",
+        "account blocked",
+        "account block",
+        "khata band",
+        "sim will be disconnected",
+        "sim block",
+        "giraftari",
+        "giraftar",
+        "legal action",
+        "case register",
+        "within 2 hours",
+        "turant",
+        "abhi karo",
+        "last warning",
+        "will be blocked",
+        "account will be blocked",
+        "blocked within",
+        "within two hours",
+        "two hours",
+        "suspended",
+        "freeze your account"
+      ]
+    },
+    {
+      "id": "secrecy",
+      "label": "Asked to keep it secret / stay on the line",
+      "labelHi": "किसी को न बताने / लाइन पर बने रहने को कहा",
+      "weight": 20,
+      "patterns": [
+        "do not tell anyone",
+        "kisi ko mat batana",
+        "stay on the line",
+        "line par rahiye",
+        "line mat kaato",
+        "don't disconnect",
+        "phone mat rakho",
+        "confidential",
+        "secret"
+      ]
+    }
+  ],
+  "combinationBonus": {
+    "value": 15,
+    "label": "High-risk combination of demands",
+    "labelHi": "माँगों का उच्च-जोखिम संयोजन",
+    "requireAny": [
+      "credential_request",
+      "remote_access"
+    ],
+    "withAny": [
+      "authority_claim",
+      "threat_urgency"
+    ]
+  }
+}

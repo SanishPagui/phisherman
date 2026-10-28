@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Phisherman</string>
+    <string name="channel_alerts_name">फ़िशिंग चेतावनियाँ</string>
+    <string name="channel_alerts_desc">जोखिम भरे लिंक, संदेश और कॉल की चेतावनियाँ</string>
+    <string name="channel_guard_name">कॉल गार्ड</string>
+    <string name="channel_guard_desc">जब कॉल गार्ड सुन रहा हो तब दिखता है</string>
+    <string name="call_guard_running">कॉल गार्ड चालू है — स्कैम-कॉल भाषा सुन रहा है</string>
+</resources>

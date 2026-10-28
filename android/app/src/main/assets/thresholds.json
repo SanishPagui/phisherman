@@ -1,0 +1,22 @@
+{
+  "version": "thr-2",
+  "link": {
+    "suspicious": 0.3,
+    "dangerous": 0.5
+  },
+  "sms": {
+    "suspicious": 0.3,
+    "dangerous": 0.5
+  },
+  "rules": {
+    "deepNestDepth": 3.0,
+    "typosquatLev": 0.25,
+    "highEntropy": 3.6,
+    "ipFloor": 80,
+    "atFloor": 65,
+    "deepNestFloor": 60,
+    "brandInSubFloor": 70,
+    "typosquatFloor": 78,
+    "shortenerFloor": 45
+  }
+}

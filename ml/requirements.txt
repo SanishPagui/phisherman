@@ -1,0 +1,8 @@
+# Phase 1 ML pipeline. Python 3.10+.
+# pandas is intentionally NOT required — scripts use stdlib csv + numpy so they run
+# even where a security policy blocks pandas' native DLLs.
+numpy>=1.26
+scikit-learn>=1.3
+scipy>=1.11
+skl2onnx>=1.16
+onnxruntime>=1.17

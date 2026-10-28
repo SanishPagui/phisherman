@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- SMS analysis (Phase 3). Paste box still works if denied. -->
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <!-- Warnings (Android 13+). In-app banner is the fallback. -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- Call guard speech recognition (Phase 4). -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
+    <!-- Optional, declared but unused by core checks: only for opt-in link expansion. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- Package visibility: needed to discover real browsers for safe-link forwarding. -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="https" />
+        </intent>
+        <!-- Cybercrime portal / dialler intents used by the report screen. -->
+        <intent>
+            <action android:name="android.intent.action.DIAL" />
+        </intent>
+    </queries>
+
+    <application
+        android:name=".KavachApp"
+        android:allowBackup="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Phisherman"
+        tools:targetApi="34">
+
+        <!-- Home / dashboard -->
+        <activity
+            android:name=".ui.MainActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Phisherman">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <!-- Share-to-app fallback: text/URLs shared from any app land here. -->
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
+
+        <!-- Link interceptor: eligible to be the default browser (http/https, no host). -->
+        <activity
+            android:name=".link.LinkRouterActivity"
+            android:exported="true"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.Phisherman.Transparent">
+            <intent-filter android:autoVerify="false">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+            </intent-filter>
+        </activity>
+
+        <!-- Full-screen warning shown before a risky link opens. -->
+        <activity
+            android:name=".ui.WarningActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.Phisherman" />
+
+        <!-- Report / recovery screen. -->
+        <activity
+            android:name=".ui.ReportActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Phisherman" />
+
+        <!-- SMS receiver, protected so only the system can deliver broadcasts. -->
+        <receiver
+            android:name=".sms.SmsReceiver"
+            android:exported="true"
+            android:permission="android.permission.BROADCAST_SMS">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Visible foreground service for the call guard (microphone). -->
+        <service
+            android:name=".voice.CallGuardService"
+            android:exported="false"
+            android:foregroundServiceType="microphone" />
+    </application>
+</manifest>

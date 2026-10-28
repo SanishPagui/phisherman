@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Phisherman</string>
+    <!-- Notification channels (used outside Compose). -->
+    <string name="channel_alerts_name">Phishing alerts</string>
+    <string name="channel_alerts_desc">Warnings about risky links, messages and calls</string>
+    <string name="channel_guard_name">Call guard</string>
+    <string name="channel_guard_desc">Shown while the call guard is listening</string>
+    <string name="call_guard_running">Call guard is on — listening for scam-call language</string>
+</resources>
