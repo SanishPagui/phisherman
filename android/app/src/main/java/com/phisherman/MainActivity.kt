@@ -38,11 +38,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -112,11 +113,12 @@ class MainActivity : ComponentActivity() {
                 HomeScreen(
                     protection = protection,
                     actions = HomeActions(
-                        links = ::requestLinkHandler,
-                        sms = ::requestSmsProtection,
-                        notifications = ::openListenerSettings,
-                        openChats = { startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)) },
-                        calls = { startActivity(Intent(this, CallGuardActivity::class.java)) },
+                        links = { on -> toggle(Prefs.Feature.LINKS, on, isLinkHandler(), ::requestLinkHandler) },
+                        sms = { on -> toggle(Prefs.Feature.SMS, on, hasSmsProtection(), ::requestSmsProtection) },
+                        notifications = { on -> toggle(Prefs.Feature.NOTIFICATIONS, on, MessageNotificationListener.isEnabled(this), ::openListenerSettings) },
+                        openChats = { on -> toggle(Prefs.Feature.OPEN_CHATS, on, ChatScreenReader.isEnabled(this)) {
+                            startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)) } },
+                        calls = ::toggleCalls,
                         battery = ::requestBatteryExemption,
                     ),
                     decisions = decisions,
@@ -130,12 +132,32 @@ class MainActivity : ComponentActivity() {
         refresh()
     }
 
+    /**
+     * A protection is on when Android allows it AND the user's switch is on. Switching off only
+     * pauses it inside Phisherman (permissions stay); switching on asks for the permission if needed.
+     */
+    private fun toggle(f: Prefs.Feature, on: Boolean, granted: Boolean, grant: () -> Unit) {
+        Prefs.setEnabled(this, f, on)
+        if (on && !granted) grant()
+        refresh()
+    }
+
+    private fun toggleCalls(on: Boolean) {
+        when {
+            !on -> { Prefs.setAutoCallGuard(this, false); CallWatcher.stop(this) }
+            CallWatcher.canWatch(this) -> { Prefs.setAutoCallGuard(this, true); CallWatcher.start(this) }
+            else -> startActivity(Intent(this, CallGuardActivity::class.java))  // asks for call permissions there
+        }
+        refresh()
+    }
+
     private fun refresh() {
+        fun on(f: Prefs.Feature, granted: Boolean) = granted && Prefs.enabled(this, f)
         protection = Protection(
-            links = isLinkHandler(),
-            sms = hasSmsProtection(),
-            notifications = MessageNotificationListener.isEnabled(this),
-            openChats = ChatScreenReader.isEnabled(this),
+            links = on(Prefs.Feature.LINKS, isLinkHandler()),
+            sms = on(Prefs.Feature.SMS, hasSmsProtection()),
+            notifications = on(Prefs.Feature.NOTIFICATIONS, MessageNotificationListener.isEnabled(this)),
+            openChats = on(Prefs.Feature.OPEN_CHATS, ChatScreenReader.isEnabled(this)),
             calls = Prefs.autoCallGuard(this) && CallWatcher.canWatch(this),
             battery = getSystemService(PowerManager::class.java).isIgnoringBatteryOptimizations(packageName),
         )
@@ -196,8 +218,8 @@ class MainActivity : ComponentActivity() {
 }
 
 class HomeActions(
-    val links: () -> Unit, val sms: () -> Unit, val notifications: () -> Unit,
-    val openChats: () -> Unit, val calls: () -> Unit, val battery: () -> Unit,
+    val links: (Boolean) -> Unit, val sms: (Boolean) -> Unit, val notifications: (Boolean) -> Unit,
+    val openChats: (Boolean) -> Unit, val calls: (Boolean) -> Unit, val battery: () -> Unit,
 )
 
 @Composable
@@ -213,8 +235,9 @@ private fun HomeScreen(protection: Protection, actions: HomeActions, decisions: 
         // PS4 10.2: a warning in the last 15 minutes gets a reminder, in case the user went ahead anyway
         decisions.firstOrNull { it.level != "SAFE" && System.currentTimeMillis() - it.ts < 15 * 60_000 }?.let { d ->
             val mins = ((System.currentTimeMillis() - d.ts) / 60_000).coerceAtLeast(1)
+            val what = if (d.channel == "VOICE") "During a ${d.subject.takeIf { it != "call" } ?: "call"}" else "${channelLabel(d.channel)}: ${d.subject}"
             Notice(Brand.Danger, "You were warned $mins min ago",
-                "${d.subject}. If you entered details, shared an OTP or paid, call your bank right away.")
+                "$what. If you entered details, shared an OTP or paid, call your bank right away.")
         }
         LinkAnalyser.loadError?.let { Notice(Brand.Danger, "Detection engine failed to load", it) }
         if ((protection.sms || protection.notifications) && !protection.battery) {
@@ -233,7 +256,7 @@ private fun HomeScreen(protection: Protection, actions: HomeActions, decisions: 
                 RowDivider()
                 ProtectionRow("💬", "Open chats & emails", "Messages on screen in chat and mail apps", protection.openChats, actions.openChats)
                 RowDivider()
-                ProtectionRow("📞", "Calls", "Warns during scam calls (via Live Caption)", protection.calls, actions.calls)
+                ProtectionRow("📞", "Calls", "Phone & WhatsApp calls, via Live Caption", protection.calls, actions.calls)
             }
         }
 
@@ -284,8 +307,9 @@ private fun SectionTitle(t: String) =
 private fun RowDivider() = HorizontalDivider(Modifier.padding(start = 64.dp), color = MaterialTheme.colorScheme.surfaceVariant)
 
 @Composable
-private fun ProtectionRow(icon: String, title: String, subtitle: String, on: Boolean, onTurnOn: () -> Unit) {
-    Row(Modifier.fillMaxWidth().padding(horizontal = 14.dp, vertical = 12.dp), verticalAlignment = Alignment.CenterVertically) {
+private fun ProtectionRow(icon: String, title: String, subtitle: String, on: Boolean, onToggle: (Boolean) -> Unit) {
+    Row(Modifier.fillMaxWidth().clickable { onToggle(!on) }.padding(horizontal = 14.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically) {
         Box(Modifier.size(38.dp).clip(CircleShape).background(MaterialTheme.colorScheme.primaryContainer), contentAlignment = Alignment.Center) {
             Text(icon, fontSize = 18.sp)
         }
@@ -294,7 +318,8 @@ private fun ProtectionRow(icon: String, title: String, subtitle: String, on: Boo
             Text(title, fontWeight = FontWeight.SemiBold)
             Text(subtitle, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
-        if (on) Chip("On", Brand.Safe) else FilledTonalButton(onClick = onTurnOn) { Text("Turn on") }
+        Switch(checked = on, onCheckedChange = onToggle,
+            colors = SwitchDefaults.colors(checkedThumbColor = Color.White, checkedTrackColor = Brand.Safe))
     }
 }
 

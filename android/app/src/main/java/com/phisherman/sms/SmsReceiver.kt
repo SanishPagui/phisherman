@@ -19,6 +19,7 @@ import kotlinx.coroutines.launch
 class SmsReceiver : BroadcastReceiver() {
     override fun onReceive(c: Context, i: Intent) {
         if (i.action != Telephony.Sms.Intents.SMS_RECEIVED_ACTION) return
+        if (!com.phisherman.data.Prefs.enabled(c, com.phisherman.data.Prefs.Feature.SMS)) return
         val msgs = Telephony.Sms.Intents.getMessagesFromIntent(i) ?: return
         val sender = msgs.firstOrNull()?.originatingAddress ?: return
         val body = msgs.joinToString("") { it.messageBody ?: "" }  // multipart messages arrive in pieces
@@ -42,6 +43,7 @@ object SmsHandler {
         recordSafe: Boolean = true,  // false for non-chat apps: only flagged notifications are logged
         forceNew: Boolean = false,   // the caller knows this is a new copy of an earlier text
         context: String? = null,     // recent messages of the same chat, for the on-device AI
+        appNotice: Boolean = false,  // an app's own notification ("updates you missed"), not a person's message
     ) {
         val app = ctx.applicationContext
         // the same message can arrive twice: dual SIM, or SMS broadcast + Messages notification
@@ -50,7 +52,7 @@ object SmsHandler {
             try {
                 val trusted = isTrustedName(sender, sourceApp)
                 var v = SmsAnalyser.analyse(app, sender, body, trusted)
-                v = secondOpinion(v, sender, body, context, sourceApp, trusted)
+                v = if (appNotice) appNoticeVerdict(v) else secondOpinion(v, sender, body, context, sourceApp, trusted)
                 if (sourceApp != null) v = v.copy(subject = "$sender · $sourceApp")
                 Log.d(TAG, "verdict ${v.level} ${v.ruleHits} from ${sourceApp ?: "SMS"}")
                 if (recordSafe || v.level != Level.SAFE) DecisionLog.record(app, v)
@@ -66,6 +68,14 @@ object SmsHandler {
             }
         }
     }
+
+    /**
+     * An installed app talking about itself (LinkedIn "updates you may have missed", order and
+     * like notifications) is not a stranger's message: wording alone never flags it, only hard
+     * evidence does (a risky link, an OTP / PIN request, an APK, a brand name with a fake link).
+     */
+    private fun appNoticeVerdict(v: Verdict): Verdict =
+        if (v.level != Level.SAFE && v.ruleHits.all { it == "model" }) v.copy(level = Level.SAFE) else v
 
     private val HEADER = Regex("^[A-Z]{2}-[A-Z0-9]{3,9}(?:-[A-Z])?$")
 

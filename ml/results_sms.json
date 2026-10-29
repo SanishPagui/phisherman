@@ -71,30 +71,30 @@
   },
   "engine": {
     "all": {
-      "precision": 0.9651,
+      "precision": 0.9822,
       "recall": 0.9872,
       "fdr": 0.9872,
-      "fpr": 0.0064,
-      "f1": 0.976,
+      "fpr": 0.0032,
+      "f1": 0.9847,
       "n": 2583,
       "n_phishing": 392,
       "tp": 387,
-      "fp": 14,
+      "fp": 7,
       "fn": 5,
-      "tn": 2177
+      "tn": 2184
     },
     "uci": {
-      "precision": 0.9023,
+      "precision": 0.9524,
       "recall": 0.96,
       "fdr": 0.96,
-      "fpr": 0.0144,
-      "f1": 0.9302,
+      "fpr": 0.0066,
+      "f1": 0.9562,
       "n": 1029,
       "n_phishing": 125,
       "tp": 120,
-      "fp": 13,
+      "fp": 6,
       "fn": 5,
-      "tn": 891
+      "tn": 898
     },
     "india_hf": {
       "precision": 1.0,

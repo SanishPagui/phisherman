@@ -2,60 +2,373 @@
   "version": "voice-1",
   "note": "PS4 9.3: hand-set starting weights, not learned. Each category counts once per window. Patterns are matched on the lower-cased transcript; latin patterns use ASCII word edges, Devanagari ones are matched as written. Includes common speech-recognition mis-hearings.",
   "window_seconds": 60,
-  "bands": { "suspicious": 40, "dangerous": 70 },
+  "bands": {
+    "suspicious": 40,
+    "dangerous": 70
+  },
   "combos": [
-    { "id": "ask_plus_pressure", "bonus": 15, "any_of": ["credential", "remote_access"], "with_any_of": ["authority", "threat", "lure"] },
-    { "id": "digital_arrest", "bonus": 15, "any_of": ["secrecy"], "with_any_of": ["authority", "threat"] }
+    {
+      "id": "ask_plus_pressure",
+      "bonus": 15,
+      "any_of": [
+        "credential",
+        "remote_access"
+      ],
+      "with_any_of": [
+        "authority",
+        "threat",
+        "lure"
+      ]
+    },
+    {
+      "id": "digital_arrest",
+      "bonus": 15,
+      "any_of": [
+        "secrecy"
+      ],
+      "with_any_of": [
+        "authority",
+        "threat"
+      ]
+    },
+    {
+      "id": "link_plus_pressure",
+      "bonus": 15,
+      "any_of": [
+        "visit_link"
+      ],
+      "with_any_of": [
+        "authority",
+        "threat",
+        "lure",
+        "credential",
+        "payment"
+      ]
+    },
+    {
+      "id": "ask_plus_urgency",
+      "bonus": 30,
+      "any_of": [
+        "credential",
+        "remote_access"
+      ],
+      "with_any_of": [
+        "urgency"
+      ]
+    }
   ],
   "categories": [
     {
-      "id": "credential", "weight": 40,
+      "id": "credential",
+      "weight": 40,
       "en": "Asks for an OTP, PIN, CVV or password",
       "hi": "OTP, PIN, CVV या पासवर्ड माँग रहा है",
-      "latin": ["otp", "o t p", "one time password", "pin number", "upi pin", "atm pin", "cvv", "c v v", "password", "card number", "card details", "expiry date", "verification code", "otp batao", "otp bataiye", "pin batao", "code batao", "code bataiye", "jo code aaya"],
-      "devanagari": ["ओटीपी", "पिन", "पासवर्ड", "कार्ड नंबर", "कोड बताइए", "कोड बताओ"]
+      "latin": [
+        "otp",
+        "o t p",
+        "one time password",
+        "pin number",
+        "upi pin",
+        "atm pin",
+        "cvv",
+        "c v v",
+        "password",
+        "card number",
+        "card details",
+        "expiry date",
+        "verification code",
+        "otp batao",
+        "otp bataiye",
+        "pin batao",
+        "code batao",
+        "code bataiye",
+        "jo code aaya"
+      ],
+      "devanagari": [
+        "ओटीपी",
+        "पिन",
+        "पासवर्ड",
+        "कार्ड नंबर",
+        "कोड बताइए",
+        "कोड बताओ"
+      ]
     },
     {
-      "id": "remote_access", "weight": 35,
+      "id": "remote_access",
+      "weight": 35,
       "en": "Asks you to install a screen-sharing or remote-control app",
       "hi": "स्क्रीन शेयरिंग या रिमोट ऐप इंस्टॉल करवाना चाहता है",
-      "latin": ["anydesk", "any desk", "teamviewer", "team viewer", "quicksupport", "quick support", "rustdesk", "rust desk", "airdroid", "screen share", "share your screen", "share screen", "screen share karo", "install the app", "download the app", "apk"],
-      "devanagari": ["एनीडेस्क", "स्क्रीन शेयर", "ऐप डाउनलोड"]
+      "latin": [
+        "anydesk",
+        "any desk",
+        "teamviewer",
+        "team viewer",
+        "quicksupport",
+        "quick support",
+        "rustdesk",
+        "rust desk",
+        "airdroid",
+        "screen share",
+        "share your screen",
+        "share screen",
+        "screen share karo",
+        "install the app",
+        "download the app",
+        "apk"
+      ],
+      "devanagari": [
+        "एनीडेस्क",
+        "स्क्रीन शेयर",
+        "ऐप डाउनलोड"
+      ]
     },
     {
-      "id": "payment", "weight": 25,
+      "id": "payment",
+      "weight": 25,
       "en": "Asks you to pay or transfer money",
       "hi": "पैसे भेजने या ट्रांसफर करने को कह रहा है",
-      "latin": ["transfer", "send money", "send the money", "verification amount", "verification fee", "processing fee", "safe account", "pay the fine", "pay now", "customs duty", "google pay kar", "paytm kar", "phonepe kar", "upi kar", "paise bhejo", "paise bhej", "paisa bhejo", "amount bhejo", "challan bharo", "fine bharo"],
-      "devanagari": ["पैसे भेजो", "पैसे भेजिए", "ट्रांसफर", "भुगतान", "जुर्माना"]
+      "latin": [
+        "transfer",
+        "send money",
+        "send the money",
+        "verification amount",
+        "verification fee",
+        "processing fee",
+        "safe account",
+        "pay the fine",
+        "pay now",
+        "customs duty",
+        "google pay kar",
+        "paytm kar",
+        "phonepe kar",
+        "upi kar",
+        "paise bhejo",
+        "paise bhej",
+        "paisa bhejo",
+        "amount bhejo",
+        "challan bharo",
+        "fine bharo"
+      ],
+      "devanagari": [
+        "पैसे भेजो",
+        "पैसे भेजिए",
+        "ट्रांसफर",
+        "भुगतान",
+        "जुर्माना"
+      ]
     },
     {
-      "id": "authority", "weight": 20,
+      "id": "authority",
+      "weight": 20,
       "en": "Claims to be police, a bank or a government officer",
       "hi": "पुलिस, बैंक या सरकारी अधिकारी होने का दावा",
-      "latin": ["police", "cyber crime", "cyber cell", "cbi", "c b i", "customs", "rbi", "r b i", "trai", "income tax", "inspector", "officer", "head office", "bank manager", "branch manager", "narcotics", "enforcement directorate", "officer bol raha", "bank se bol raha", "police station"],
-      "devanagari": ["पुलिस", "सीबीआई", "कस्टम", "इंस्पेक्टर", "अधिकारी", "बैंक से"]
+      "latin": [
+        "police",
+        "cyber crime",
+        "cyber cell",
+        "cbi",
+        "c b i",
+        "customs",
+        "rbi",
+        "r b i",
+        "trai",
+        "income tax",
+        "inspector",
+        "officer",
+        "head office",
+        "bank manager",
+        "branch manager",
+        "narcotics",
+        "enforcement directorate",
+        "officer bol raha",
+        "bank se bol raha",
+        "police station"
+      ],
+      "devanagari": [
+        "पुलिस",
+        "सीबीआई",
+        "कस्टम",
+        "इंस्पेक्टर",
+        "अधिकारी",
+        "बैंक से"
+      ]
     },
     {
-      "id": "threat", "weight": 20,
+      "id": "threat",
+      "weight": 20,
       "en": "Threatens arrest, a blocked account or a cut connection",
       "hi": "गिरफ्तारी, खाता बंद या कनेक्शन कटने की धमकी",
-      "latin": ["arrest", "digital arrest", "warrant", "f i r", "fir darj", "account blocked", "account will be blocked", "blocked today", "will be suspended", "disconnected", "connection cut", "legal action", "court", "jail", "giraftari", "khata band", "account band", "connection kat", "kat jayega"],
-      "devanagari": ["गिरफ्तार", "वारंट", "खाता बंद", "कनेक्शन कट", "जेल"]
+      "latin": [
+        "arrest",
+        "digital arrest",
+        "warrant",
+        "f i r",
+        "fir darj",
+        "account blocked",
+        "account will be blocked",
+        "blocked today",
+        "will be suspended",
+        "disconnected",
+        "connection cut",
+        "legal action",
+        "court",
+        "jail",
+        "giraftari",
+        "khata band",
+        "account band",
+        "connection kat",
+        "kat jayega"
+      ],
+      "devanagari": [
+        "गिरफ्तार",
+        "वारंट",
+        "खाता बंद",
+        "कनेक्शन कट",
+        "जेल"
+      ]
     },
     {
-      "id": "lure", "weight": 20,
+      "id": "lure",
+      "weight": 20,
       "en": "Offers a reward, prize, cashback or refund",
       "hi": "इनाम, लॉटरी, कैशबैक या रिफंड का लालच",
-      "latin": ["reward points", "reward point", "cashback", "cash back", "lottery", "prize", "you have won", "lucky draw", "refund", "bonus", "gift", "inaam", "lottery lagi", "jeet gaye"],
-      "devanagari": ["इनाम", "लॉटरी", "कैशबैक", "रिफंड"]
+      "latin": [
+        "reward points",
+        "reward point",
+        "cashback",
+        "cash back",
+        "lottery",
+        "prize",
+        "you have won",
+        "lucky draw",
+        "refund",
+        "bonus",
+        "gift",
+        "inaam",
+        "lottery lagi",
+        "jeet gaye"
+      ],
+      "devanagari": [
+        "इनाम",
+        "लॉटरी",
+        "कैशबैक",
+        "रिफंड"
+      ]
     },
     {
-      "id": "secrecy", "weight": 20,
+      "id": "secrecy",
+      "weight": 20,
       "en": "Tells you to keep this secret or stay on the line",
       "hi": "किसी को न बताने या लाइन पर रहने को कह रहा है",
-      "latin": ["do not tell anyone", "don't tell anyone", "dont tell anyone", "keep this confidential", "keep it secret", "stay on the line", "do not disconnect", "don't disconnect", "do not cut the call", "kisi ko mat batana", "kisi ko mat bataiye", "kisi ko nahi batana", "line par rahiye", "call mat kaatna", "phone mat kaatna"],
-      "devanagari": ["किसी को मत बताना", "किसी को मत बताइए", "लाइन पर रहिए", "फोन मत काटना"]
+      "latin": [
+        "do not tell anyone",
+        "don't tell anyone",
+        "dont tell anyone",
+        "keep this confidential",
+        "keep it secret",
+        "stay on the line",
+        "do not disconnect",
+        "don't disconnect",
+        "do not cut the call",
+        "kisi ko mat batana",
+        "kisi ko mat bataiye",
+        "kisi ko nahi batana",
+        "line par rahiye",
+        "call mat kaatna",
+        "phone mat kaatna"
+      ],
+      "devanagari": [
+        "किसी को मत बताना",
+        "किसी को मत बताइए",
+        "लाइन पर रहिए",
+        "फोन मत काटना"
+      ]
+    },
+    {
+      "id": "visit_link",
+      "weight": 20,
+      "en": "Asks you to open a link or type a website",
+      "hi": "लिंक खोलने या वेबसाइट टाइप करने को कहा",
+      "latin": [
+        "open the link",
+        "open this link",
+        "click the link",
+        "click on the link",
+        "click this link",
+        "tap the link",
+        "type this website",
+        "type the website",
+        "type this address",
+        "go to the website",
+        "visit the website",
+        "visit our website",
+        "open your browser",
+        "open chrome",
+        "open google chrome",
+        "in your browser",
+        "website pe jao",
+        "website par jao",
+        "website kholo",
+        "link kholo",
+        "link khol",
+        "link pe click",
+        "link par click",
+        "link open karo",
+        "browser kholo",
+        "chrome kholo",
+        "type karo",
+        "that is the link",
+        "that's the link",
+        "the link is",
+        "this is the link",
+        "log in there",
+        "log in here",
+        "login there",
+        "login here",
+        "sign in there",
+        "sign in here",
+        "the website is",
+        "website name is"
+      ],
+      "devanagari": [
+        "लिंक खोलो",
+        "लिंक खोलिए",
+        "लिंक पर क्लिक",
+        "वेबसाइट पर जाओ",
+        "वेबसाइट पर जाइए",
+        "वेबसाइट खोलो",
+        "ब्राउज़र खोलो"
+      ]
+    },
+    {
+      "id": "urgency",
+      "weight": 0,
+      "en": "Pushes you to act right now",
+      "hi": "तुरंत करने का दबाव",
+      "latin": [
+        "right now",
+        "immediately",
+        "urgent",
+        "urgently",
+        "within 10 minutes",
+        "within ten minutes",
+        "within 5 minutes",
+        "in the next 10 minutes",
+        "hurry up",
+        "do it now",
+        "jaldi",
+        "jaldi karo",
+        "turant",
+        "abhi ke abhi",
+        "abhi turant",
+        "fauran"
+      ],
+      "devanagari": [
+        "जल्दी",
+        "तुरंत",
+        "अभी के अभी",
+        "फौरन"
+      ]
     }
   ]
 }

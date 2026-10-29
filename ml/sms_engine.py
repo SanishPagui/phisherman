@@ -19,6 +19,9 @@ ASSETS = Path(__file__).resolve().parent.parent / "android/app/src/main/assets"
 LEVELS = ["SAFE", "SUSPICIOUS", "DANGEROUS"]
 BONUS = 0.15
 SHORT_MSG_WORDS = 4  # fewer words than this next to a link: ignore the text model
+# a short text with no link ("Mummy call kar", Konkani / slang the model has never seen) is too
+# little evidence for the word model alone: it must be sure enough for red before anything shows
+SHORT_TEXT_WORDS = 8
 
 A = "(?<![a-z])"   # ASCII word edges: same meaning in Python and Java
 Z = "(?![a-z])"
@@ -102,6 +105,8 @@ class SmsEngine:
             hits.append("R_SENDER_MISMATCH"); score += BONUS
         score = min(score, 1.0)
         level = 2 if score >= self.thr_d else 1 if score >= self.thr_s else 0
+        if not urls and not hits and len(TOKEN_RE.findall(norm)) < SHORT_TEXT_WORDS and level < 2:
+            level = 0
 
         link_level = None
         for u in urls:

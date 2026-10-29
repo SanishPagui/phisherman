@@ -25,7 +25,8 @@ class LinkRouterActivity : ComponentActivity() {
             return
         }
         lifecycleScope.launch {
-            if (LinkAnalyser.recentlyOpenedAnyway(url)) {
+            val off = !com.phisherman.data.Prefs.enabled(this@LinkRouterActivity, com.phisherman.data.Prefs.Feature.LINKS)
+            if (off || LinkAnalyser.recentlyOpenedAnyway(url)) {
                 forward(url)
                 return@launch
             }

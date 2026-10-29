@@ -81,6 +81,8 @@ class ChatScreenReader : AccessibilityService() {
             if (CallWatcher.inCall) readCaptions()
             return
         }
+        // call captions and the installer warning stay on; the switch covers chats and emails
+        if (!com.phisherman.data.Prefs.enabled(this, com.phisherman.data.Prefs.Feature.OPEN_CHATS)) return
         if (pkg in EMAIL_APPS) {
             main.removeCallbacks(pendingEmail)
             main.postDelayed(pendingEmail, 1200)  // the body (often a WebView) loads after the header

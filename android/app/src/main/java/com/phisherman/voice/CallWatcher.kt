@@ -12,7 +12,10 @@ import androidx.core.content.ContextCompat
 import com.phisherman.data.Prefs
 
 /**
- * Automatic call guard: when a phone call starts, start listening; when it ends, stop.
+ * Automatic call guard: when a phone call or an internet call (WhatsApp, Telegram, ...) starts,
+ * start listening; when it ends, stop. Internet calls are not reported by the phone network, so
+ * they are recognised by two signals together: the app's ongoing call notification (seen by
+ * MessageNotificationListener) and the audio system in voice-call mode.
  * Needs READ_PHONE_STATE (call state only, never the number) and the auto-guard setting on.
  * Note: Android usually gives other apps silence from the microphone during a call; the service
  * measures the input level so the app can tell the user if that is happening on their phone.
@@ -20,8 +23,14 @@ import com.phisherman.data.Prefs
 object CallWatcher {
     private const val TAG = "CallWatcher"
     private var registered: Any? = null
-    @Volatile var inCall = false
-        private set
+    private var modeListener: android.media.AudioManager.OnModeChangedListener? = null
+    @Volatile private var phoneCall = false
+    /** The app whose internet call notification is showing (e.g. "WhatsApp"), null if none. */
+    @Volatile private var voipNotice: String? = null
+    @Volatile private var voipCall = false
+    val inCall: Boolean get() = phoneCall || voipCall
+    /** "WhatsApp" during a WhatsApp call, null during a phone call. */
+    val callApp: String? get() = if (voipCall && !phoneCall) voipNotice else null
 
     fun canWatch(ctx: Context) = Build.VERSION.SDK_INT >= 31 &&
         ContextCompat.checkSelfPermission(ctx, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED &&
@@ -35,16 +44,14 @@ object CallWatcher {
             override fun onCallStateChanged(state: Int) {
                 Log.d(TAG, "call state $state")
                 when (state) {
-                    TelephonyManager.CALL_STATE_OFFHOOK -> if (!inCall) {
-                        inCall = true
-                        captionsOnForCall(app)
-                        startGuard(app)
+                    TelephonyManager.CALL_STATE_OFFHOOK -> if (!phoneCall) {
+                        val was = inCall
+                        phoneCall = true
+                        if (!was) callStarted(app)
                     }
-                    TelephonyManager.CALL_STATE_IDLE -> if (inCall) {
-                        inCall = false
-                        stopGuard(app)
-                        CallAlerts.stop(app)  // whatever raised the alert, hanging up ends it
-                        captionsOffAfterCall(app)
+                    TelephonyManager.CALL_STATE_IDLE -> if (phoneCall) {
+                        phoneCall = false
+                        if (!inCall) callEnded(app)
                     }
                 }
             }
@@ -56,12 +63,52 @@ object CallWatcher {
         } catch (e: SecurityException) {
             Log.w(TAG, "cannot watch calls", e)
         }
+        val am = app.getSystemService(android.media.AudioManager::class.java)
+        val ml = android.media.AudioManager.OnModeChangedListener { mode -> Log.d(TAG, "audio mode $mode"); updateVoip(app) }
+        am.addOnModeChangedListener(ContextCompat.getMainExecutor(app), ml)
+        modeListener = ml
     }
 
     fun stop(ctx: Context) {
+        val app = ctx.applicationContext
+        modeListener?.let { app.getSystemService(android.media.AudioManager::class.java).removeOnModeChangedListener(it) }
+        modeListener = null
         val cb = registered as? TelephonyCallback ?: return
-        ctx.applicationContext.getSystemService(TelephonyManager::class.java).unregisterTelephonyCallback(cb)
+        app.getSystemService(TelephonyManager::class.java).unregisterTelephonyCallback(cb)
         registered = null
+    }
+
+    /** From the notification listener: an internet-call app shows (or removed) its call notification. */
+    fun onVoipNotification(ctx: Context, app: String?) {
+        if (voipNotice == app) return
+        voipNotice = app
+        Log.d(TAG, "internet call notification: ${app ?: "gone"}")
+        val appCtx = ctx.applicationContext
+        ContextCompat.getMainExecutor(appCtx).execute { updateVoip(appCtx) }
+    }
+
+    /** An internet call is live while its notification shows AND the audio is in voice-call mode. */
+    private fun updateVoip(app: Context) {
+        if (registered == null) return  // auto guard off
+        val mode = app.getSystemService(android.media.AudioManager::class.java).mode
+        val live = voipNotice != null && mode == android.media.AudioManager.MODE_IN_COMMUNICATION
+        if (live == voipCall) return
+        val was = inCall
+        voipCall = live
+        Log.i(TAG, if (live) "internet call started ($voipNotice)" else "internet call ended")
+        if (!was && inCall) callStarted(app)
+        if (was && !inCall) callEnded(app)
+    }
+
+    private fun callStarted(app: Context) {
+        captionsOnForCall(app)
+        startGuard(app)
+    }
+
+    private fun callEnded(app: Context) {
+        stopGuard(app)
+        CallAlerts.stop(app)  // whatever raised the alert, hanging up ends it
+        captionsOffAfterCall(app)
     }
 
     private const val CAPTIONS = "odi_captions_enabled"
@@ -96,7 +143,7 @@ object CallWatcher {
     fun restoreCaptions(ctx: Context) {
         val tm = ctx.getSystemService(TelephonyManager::class.java)
         val idle = runCatching { tm.callStateForSubscription == TelephonyManager.CALL_STATE_IDLE }.getOrDefault(true)
-        if (idle) captionsOffAfterCall(ctx)
+        if (idle && !voipCall) captionsOffAfterCall(ctx)
     }
 
     /** Live Caption on: Android's own captioning can hear calls, so read its box instead of the mic. */

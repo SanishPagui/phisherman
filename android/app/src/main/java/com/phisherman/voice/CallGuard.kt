@@ -63,7 +63,7 @@ object CallGuard {
     @Synchronized
     fun begin(ctx: Context, mode: GuardMode) {
         if (_state.value.mode != GuardMode.OFF) end(ctx)
-        session = CallSession(rules(ctx), model(ctx))
+        session = CallSession(rules(ctx), model(ctx), ::checkLink)
         lastLlmAt = 0L
         _state.value = GuardState(mode = mode, lastSummary = null)
     }
@@ -120,6 +120,7 @@ object CallGuard {
     private fun publish(ctx: Context, s: CallSession, partial: String) {
         val before = _state.value.level
         val score = s.update()
+        lastRiskyLinks = s.riskyLinks
         val r = rules(ctx)
         _state.value = _state.value.copy(
             level = score.level, score = maxOf(score.score, if (score.level == Level.DANGEROUS) r.dangerous else 0),
@@ -190,11 +191,19 @@ object CallGuard {
         val level = s.latched.coerceAtLeast(s.llm?.level ?: Level.SAFE)
         val reasons = reasonsFor(ctx, s.seen.toList())
         val v = Verdict(Channel.VOICE, s.maxScore, level, reasons.take(4), null,
-            s.seen.toList() + listOfNotNull(s.llm?.let { "llm:${it.reason}" }), 0, "call")
+            s.seen.toList() + listOfNotNull(s.llm?.let { "llm:${it.reason}" }), 0, CallWatcher.callApp?.let { "$it call" } ?: "call")
         if (s.transcriptLog.isNotEmpty()) DecisionLog.recordAsync(ctx, v)
         android.util.Log.i("CallGuard", "session ended: level=$level lines=${s.transcriptLog.size} peakDb=${_state.value.peakDb}")
         _state.value = GuardState(lastSummary = v, peakDb = _state.value.peakDb)
     }
+
+    /** Link engine for addresses read out on the call; nothing is said until it has loaded. */
+    private fun checkLink(url: String): Verdict? {
+        if (com.phisherman.link.LinkAnalyser.config() == null) return null
+        return com.phisherman.link.LinkAnalyser.decideNow(url)?.takeUnless { "engine_error" in it.ruleHits }
+    }
+
+    @Volatile private var lastRiskyLinks: List<String> = emptyList()
 
     fun reasonsFor(ctx: Context, ids: List<String>): List<Reason> {
         val r = rules(ctx)
@@ -203,6 +212,10 @@ object CallGuard {
         val fromModel = if (CallModel.ID in ids) listOf(Reason(CallModel.ID,
             "This call sounds like known scam calls",
             "यह कॉल जानी-पहचानी धोखाधड़ी वाली कॉल जैसी लगती है")) else emptyList()
-        return fromRules + fromModel
+        val links = lastRiskyLinks.take(2).joinToString(", ")
+        val fromLink = if (CallSession.DICTATED_LINK in ids) listOf(Reason(CallSession.DICTATED_LINK,
+            "Told you to open a website that is not a known safe site" + (if (links.isNotEmpty()) ": $links" else ""),
+            "ऐसी वेबसाइट खोलने को कहा जो जानी-पहचानी सुरक्षित साइट नहीं है" + (if (links.isNotEmpty()) ": $links" else ""))) else emptyList()
+        return fromLink + fromRules + fromModel
     }
 }

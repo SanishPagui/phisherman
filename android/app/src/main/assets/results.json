@@ -67,16 +67,16 @@
         "set": "Held-out messages (UCI + Indian)",
         "n": 2583,
         "scams": 392,
-        "precision": 0.9651,
+        "precision": 0.9822,
         "recall": 0.9872,
         "fdr": 0.9872,
-        "accuracy": 0.9926,
-        "f1": 0.976,
-        "fpr": 0.0064,
+        "accuracy": 0.9954,
+        "f1": 0.9847,
+        "fpr": 0.0032,
         "tp": 387,
-        "fp": 14,
+        "fp": 7,
         "fn": 5,
-        "tn": 2177
+        "tn": 2184
       },
       "more": [
         {
@@ -98,16 +98,16 @@
           "set": "UCI SMS (real messages)",
           "n": 1029,
           "scams": 125,
-          "precision": 0.9023,
+          "precision": 0.9524,
           "recall": 0.96,
           "fdr": 0.96,
-          "accuracy": 0.9825,
-          "f1": 0.9302,
-          "fpr": 0.0144,
+          "accuracy": 0.9893,
+          "f1": 0.9562,
+          "fpr": 0.0066,
           "tp": 120,
-          "fp": 13,
+          "fp": 6,
           "fn": 5,
-          "tn": 891
+          "tn": 898
         },
         {
           "set": "Indian / Hinglish messages (hand-written)",

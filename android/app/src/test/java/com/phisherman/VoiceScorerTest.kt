@@ -1,6 +1,10 @@
 package com.phisherman
 
 import com.phisherman.engine.Level
+import com.phisherman.link.Blocklist
+import com.phisherman.link.LinkConfig
+import com.phisherman.link.LinkDecider
+import com.phisherman.link.LinkThresholds
 import com.phisherman.voice.CallModel
 import com.phisherman.voice.CallSession
 import com.phisherman.voice.Judgement
@@ -10,12 +14,32 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.io.File
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.jsonArray
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
+import kotlinx.serialization.json.long
 
 /** PS4 13.4 P4: scam scripts reach red before the payment demand; normal calls never reach red. */
 class VoiceScorerTest {
     private val rules = VoiceRules(File("src/main/assets/voice_rules.json").readText())
     private val model = CallModel.load(File("src/main/assets/call_model.json").readText(),
         File("src/main/assets/thresholds.json").readText())
+
+    /**
+     * The real link engine (allowlist, blocklist, brand rules). The ONNX model cannot run on the JVM,
+     * so its probability is 0 here: a link is only flagged by the lists and brand rules.
+     */
+    private val linkDecider = run {
+        val assets = File("src/main/assets")
+        val cfg = LinkConfig(File(assets, "feature_order.json").readText(), File(assets, "brands.json").readText())
+        val allow = Json.parseToJsonElement(File(assets, "allowlist.json").readText()).jsonObject["domains"]!!
+            .jsonArray.map { it.jsonPrimitive.content }.toSet() + cfg.official
+        val meta = Json.parseToJsonElement(File(assets, "blocklist.json").readText()).jsonObject
+        val bl = Blocklist(File(assets, "blocklist.bloom").readBytes(), meta["m_bits"]!!.jsonPrimitive.long,
+            meta["k"]!!.jsonPrimitive.long.toInt())
+        LinkDecider(cfg, allow, bl, LinkThresholds(0.5f, 0.9f)) { 0f }
+    }
 
     private data class Script(val id: String, val kind: String, val lines: List<String>)
 
@@ -25,7 +49,7 @@ class VoiceScorerTest {
     /** Feed lines 8 s apart, like a real call; returns the level after each line. */
     private fun play(s: Script): List<Level> {
         var t = 0L
-        val session = CallSession(rules, model) { t }
+        val session = CallSession(rules, model, linkDecider::decide) { t }
         return s.lines.map { line ->
             t += 8_000
             session.addFinal(line.removePrefix("[PAY] "))
@@ -127,5 +151,43 @@ class VoiceScorerTest {
             val p = sms.prob(com.phisherman.sms.SmsNormalizer.normalize(text).text)
             assertEquals(text, expected.toDouble(), p, 1e-6)
         }
+    }
+
+    /** S7: the caller dictates a fake SBI site; the guard names the site and turns red before payment. */
+    @Test
+    fun dictatedFakeLinkIsCaught() {
+        var t = 0L
+        val session = CallSession(rules, model, linkDecider::decide) { t }
+        for (l in listOf("Hello sir, calling from your bank.", "Please type s b i dash rewards dot com slash claim.")) {
+            t += 8_000; session.addFinal(l); session.update()
+        }
+        assertTrue(session.links.toString(), "sbi-rewards.com/claim" in session.riskyLinks)
+        assertTrue(CallSession.DICTATED_LINK in session.seen)
+    }
+
+    /** Live WhatsApp test, 2026-10-29: Live Caption heard "give me" as "giving us". An urgent OTP demand is red. */
+    @Test
+    fun urgentOtpDemandFromLiveCaptionIsRed() {
+        var t = 0L
+        val session = CallSession(rules, null) { t }
+        var level = Level.SAFE
+        for (l in listOf("What's going on? Any problem?", "Hurt sir. Giving us some OTP, please right now.")) {
+            t += 6_000; session.addFinal(l); level = session.update().level
+        }
+        assertEquals(Level.DANGEROUS, level)
+    }
+
+    /** Live phone call, 2026-10-29: Live Caption wrote "dash" as "bash" and glued "dashreward.com". */
+    @Test
+    fun garbledDictatedLinkFromLiveCaption() {
+        var t = 0L
+        val session = CallSession(rules, null, linkDecider::decide) { t }
+        var level = Level.SAFE
+        for (l in listOf("Is called http slash SBI bash reward.com. That is the link.",
+                         "Log in place here. Again, https, less s e, i dashreward.com", "Anything more, you")) {
+            t += 6_000; session.addFinal(l); level = session.update().level
+        }
+        assertTrue(session.links.toString(), "sbi-reward.com" in session.riskyLinks)
+        assertEquals(Level.DANGEROUS, level)
     }
 }

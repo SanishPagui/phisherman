@@ -147,9 +147,9 @@ class CallGuardActivity : ComponentActivity() {
 
 data class DemoScript(val id: String, val kind: String, val title: String, val lines: List<String>)
 
-private val Green = Color(0xFF1B6E3A)
-private val Amber = Color(0xFFB26A00)
-private val Red = Color(0xFFB3261E)
+private val Green = Color(0xFF4CC38A)
+private val Amber = Color(0xFFF0A940)
+private val Red = Color(0xFFE5534B)
 
 @Composable
 private fun GuardScreen(
@@ -162,7 +162,7 @@ private fun GuardScreen(
     val running = st.mode != GuardMode.OFF
 
     Column(
-        Modifier.fillMaxSize().safeDrawingPadding().verticalScroll(rememberScrollState()).padding(20.dp),
+        Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).safeDrawingPadding().verticalScroll(rememberScrollState()).padding(20.dp),
         verticalArrangement = Arrangement.spacedBy(14.dp),
     ) {
         Row(Modifier.fillMaxWidth()) {
@@ -211,7 +211,7 @@ private fun GuardScreen(
                     if (st.partial.isNotBlank()) Text(st.partial + " …", style = MaterialTheme.typography.bodySmall, color = Color.Gray)
                 }
             }
-            Button(onClick = onStop, modifier = Modifier.fillMaxWidth().height(56.dp), colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray)) {
+            Button(onClick = onStop, modifier = Modifier.fillMaxWidth().height(56.dp), colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.surfaceVariant, contentColor = MaterialTheme.colorScheme.onSurface)) {
                 Text(t("Stop call guard", "कॉल गार्ड बंद करें"), fontSize = 18.sp)
             }
         } else {

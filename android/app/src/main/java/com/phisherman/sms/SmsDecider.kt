@@ -40,6 +40,8 @@ class SmsDecider(
             score >= thresholds.suspicious -> 1
             else -> 0
         }
+        // a short text with no link and no rule hit is too little evidence for the word model alone
+        if (urls.isEmpty() && hits.isEmpty() && SmsModel.tokens(norm).size < SHORT_TEXT_WORDS && level < 2) level = 0
 
         var linkLevel: Int? = null
         var worstLink: Verdict? = null
@@ -98,6 +100,7 @@ class SmsDecider(
     companion object {
         const val BONUS = 0.15
         const val SHORT_MSG_WORDS = 4
+        const val SHORT_TEXT_WORDS = 8
         private const val A = "(?<![a-z])"
         private const val Z = "(?![a-z])"
         private const val ASK = "(?:share|sharing|send|tell|give|forward|provide|reply with|enter)"

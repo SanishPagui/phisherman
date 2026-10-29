@@ -145,8 +145,8 @@ Trained on UCI + CloveAI/india-spam-sms (template-split) + our Indian set. Thres
 
 | Test set | Precision | Recall (FDR) | FPR | N (phishing) |
 |---|---|---|---|---|
-| Full engine, all test messages | 0.965 | 0.987 | 0.64% | 2,583 (392) |
-| Full engine, UCI held-out | 0.902 | 0.960 | 1.44% | 1,029 (125) |
+| Full engine, all test messages | 0.982 | 0.987 | 0.32% | 2,583 (392) |
+| Full engine, UCI held-out | 0.952 | 0.960 | 0.66% | 1,029 (125) |
 | Full engine, Indian bank / UPI / scam messages, unseen templates | 1.000 | 1.000 | 0% | 1,506 (249) |
 | Full engine, Indian synthetic held-out | 0.947 | 1.000 | 3.3% | 48 (18) |
 | Model only, Indian synthetic held-out | 0.692 | 1.000 | 27% | 48 (18) |
@@ -156,6 +156,8 @@ Trained on UCI + CloveAI/india-spam-sms (template-split) + our Indian set. Thres
 - The rules matter: on Indian messages the model alone over-flags genuine bank and brand messages (33% FPR); the trusted-header and link rules bring this to 3.7%.
 - Live false alarm, fixed: any chat message that was mostly a link (YouTube, Wikipedia, thisisnotawebsitedotcom.com) scored ~1.0, because in UCI almost every message with a link is spam and the model learned "link = scam". Links are now removed before the text model (normaliser `sms-norm-2`), each link is judged only by the link engine, and a message with fewer than 4 words next to a link takes the link's verdict. Cost: recall 0.986 → 0.965 on the full test set. Ten everyday chat messages with legitimate links were added to the Indian set.
 - Live false alarm, fixed: a genuine Indian Overseas Bank message arrived as a verified RCS business chat (sender shown as a name, not a header like `VM-IOBCHN`), so the trusted-sender rule did not apply and the model alone flagged it. In Google / Samsung Messages a sender shown as a name is now treated like a registered header (saved contact or verified business); WhatsApp names are not trusted. Numbers written with a leading 0 (`099752 17785`) now count as personal mobile numbers.
+- Live false alarm, fixed: a short Konkani WhatsApp from family ("To ata panji vata khai") scored 0.36, just over the amber threshold. A text under 8 words with no link and no rule hit now needs the red threshold before the word model alone may warn (`SHORT_TEXT_WORDS`); on the held-out set this raised precision 0.965 → 0.982 with recall unchanged.
+- Live false alarm, fixed: LinkedIn's own "Missed Notifications: See updates from LinkedIn that you may have missed" was flagged on wording. Notifications are now split into a **person's message** (MessagingStyle chat bubble, SMS app, email) and an **app's own notice**; an app notice is never flagged on wording alone, only on hard evidence (risky link, OTP / PIN request, APK, brand name with a fake link).
 - Known misses: a "Hi mom, new number, send money" impersonation scam (no link, no credential words), and a harmless Hinglish delivery note flagged amber because of the word "parcel".
 - UCI spam is treated as scam; it contains many prize / premium-rate scams but is English and UK-centric.
 
@@ -188,6 +190,17 @@ Held-out calls replayed line by line through the phone's `CallSession` (`VoiceDa
 | Our 18 hand-written Indian calls (never trained on), model alone | | 6 / 7 scams, 0 / 11 false alarms (rules catch the 7th) |
 
 Honest caveat: the public call datasets are synthetic and easy (perfect scores mean they are separable, not that real calls will be). The first version, trained without everyday conversations, scored 100% on the datasets yet flagged **every** normal hand-written call; adding DailyDialog and real SMS as normal speech fixed that. Real calls through Live Caption still need live testing.
+
+### Links read out on a call (2026-10-29)
+
+A scammer may not ask for an OTP at all, only dictate a website. `voice/SpokenLinks.kt` rebuilds addresses from the caption text ("s b i dash rewards dot com slash claim" → `sbi-rewards.com/claim`; spelled letters, dot / slash / dash / hyphen / "w w w", and links the captioner already wrote as text). Each one goes through the same link engine as the browser (allowlist, 392k blocklist, model, brand rules). An unsafe address makes the call amber, or red when other warning signs were heard, and the alert names the site. Only finished caption lines are checked, so a half-said "amazon dot co" is never judged. A two-word name ("sbi rewards dot com") is also tried joined (`sbi-rewards.com`), unless the address as heard is allowlisted. A new phrase category `visit_link` ("open the link", "type this website", "website pe jao") adds weight, with a bonus when heard alongside authority / threat / lure / credential / payment. Demo scripts: S7 (dictated fake SBI site, red before the payment line) and N7 (a friend mentions BookMyShow and YouTube, no alert). Tests: `SpokenLinksTest`, `VoiceScorerTest.dictatedFakeLinkIsCaught`.
+
+### Live tests, 2026-10-29: WhatsApp calls and garbled links
+
+- **WhatsApp calls work.** On the S21 FE, WhatsApp reports its calls to Android (call state goes OFFHOOK) and Live Caption captions the WhatsApp audio. As a second route, `CallWatcher` also treats an internet call as live when an ongoing call notification from WhatsApp / Telegram / Signal / Messenger / Instagram / Meet / Skype is showing AND the audio is in voice-call mode (`MODE_IN_COMMUNICATION`). Test call: detected, captions read, Live Caption switched off after hang-up.
+- **Urgent OTP demand only reached amber.** Captions heard "give me" as "Giving us some OTP, please right now". Added "giving" / "gimme" as asking words and an `urgency` category ("right now", "immediately", "jaldi", "turant"…). Urgency has weight 0 on its own (bank-transfer chats say "immediately" too; at weight 15 it added 6 false alarms on held-out conversations) and only adds +30 together with an OTP / remote-app request, which makes that red.
+- **Dictated link garbled.** Live Caption wrote "SBI **bash** reward.com" and "**dashreward**.com". "bash" now counts as "dash", a "dash" glued to the next word is split, up to 3 words before a domain are tried as its name ("book my show dot com" → bookmyshow.com), and any reading that is an official site wins. A site the link engine flags, read out with "log in here / that's the link", is red; a site that is not a known official one, with "that's the link / log in here", is amber. On both live calls the on-device AI had already answered SCAM (prize_lottery, link_lure) and the calls ended red; now the alert also names the site.
+- Held-out calls after these changes: 261 / 261 scams alerted, 4 / 2,829 false alarms (unchanged). Tests: `garbledDictatedLinkFromLiveCaption`, `urgentOtpDemandFromLiveCaptionIsRed`.
 
 ## Prevention (Phase 5) and results (Phase 6)
 

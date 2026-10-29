@@ -1,6 +1,7 @@
 package com.phisherman.voice
 
 import com.phisherman.engine.Level
+import com.phisherman.engine.Verdict
 import com.phisherman.sms.SmsModel
 import com.phisherman.sms.SmsNormalizer
 import kotlinx.serialization.json.Json
@@ -90,7 +91,7 @@ class VoiceScorer(private val rules: VoiceRules) {
     companion object {
         private val NEG_BEFORE = Regex("(?<![a-z])(never|don't|dont|do not|not to)(?![a-z])|मत|कभी")
         private val ASK = Regex(
-            "(?<![a-z])(tell|say|share|give|send|read|confirm|forward|provide|need|want|batao|bataiye|bataye|bata|bolo|boliye|bol do|dijiye|de do|do na|bhejo|chahiye)(?![a-z])" +
+            "(?<![a-z])(tell|say|share|give|giving|gimme|send|read|confirm|forward|provide|need|want|batao|bataiye|bataye|bata|bolo|boliye|bol do|dijiye|de do|do na|bhejo|chahiye)(?![a-z])" +
                 "|बताओ|बताइए|बताइये|बोलिए|बोलो|दीजिए|भेजो|चाहिए")
         private val NEG_AFTER =Regex("(?<![a-z])(mat|nahi|na) (batana|batao|bataiye|batayein|share|dena|dijiye)(?![a-z])|मत बताना|न बताएं")
 
@@ -143,6 +144,8 @@ data class Judgement(val level: Level, val reason: String)
 class CallSession(
     private val rules: VoiceRules,
     private val model: CallModel? = null,
+    /** The link engine: judges web addresses read out on the call (null = not checked). */
+    private val linkCheck: ((String) -> Verdict?)? = null,
     private val now: () -> Long = System::currentTimeMillis,
 ) {
     private val scorer = VoiceScorer(rules)
@@ -183,6 +186,32 @@ class CallSession(
     var modelProb = 0.0
         private set
 
+    /** Every web address heard on the call and what the link engine said about it. */
+    val links = LinkedHashMap<String, Level>()
+    /** Addresses that are not a known official site (allowlist); captions often garble the name. */
+    private val unknownLinks = LinkedHashSet<String>()
+    val riskyLinks: List<String> get() = links.filter { (u, lv) -> lv >= Level.SUSPICIOUS || u in unknownLinks && VISIT in seen }
+        .keys.map { it.removePrefix("https://") }
+
+    /**
+     * Links read out on the call (only from finished caption lines, so a half-said "amazon dot co"
+     * is never judged). A two-word name is also tried joined ("sbi rewards" -> sbi-rewards.com),
+     * unless the address as heard is on the allowlist.
+     */
+    private fun checkDictatedLinks(check: (String) -> Verdict?): Level {
+        for (c in SpokenLinks.find(transcriptLog.joinToString(" "))) {
+            if (c.url in links) continue
+            fun official(x: Verdict?) = x?.ruleHits?.firstOrNull() == "allowlist"
+            val v = check(c.url)
+            val alts = if (official(v)) emptyList() else c.alternatives.mapNotNull(check)
+            // any reading that is a known official site ("book my show" -> bookmyshow.com) wins
+            val known = official(v) || alts.any(::official)
+            links[c.url] = if (known) Level.SAFE else (listOfNotNull(v) + alts).maxOfOrNull { it.level } ?: Level.SAFE
+            if (!known && v != null) unknownLinks += c.url
+        }
+        return links.values.maxOrNull() ?: Level.SAFE
+    }
+
     fun update(): VoiceScore {
         val s = scorer.score(windowText())
         seen += s.categories
@@ -194,6 +223,21 @@ class CallSession(
             if (lv >= Level.SUSPICIOUS) seen += CallModel.ID
             if (lv > level) level = lv
         }
+        linkCheck?.let { check ->
+            val flagged = checkDictatedLinks(check)
+            if (flagged >= Level.SUSPICIOUS) {
+                seen += DICTATED_LINK
+                // a site the link engine flags, read out with "log in here" or other warning signs: red
+                val lv = if (level >= Level.SUSPICIOUS || VISIT in seen) Level.DANGEROUS else flagged
+                if (lv > level) level = lv
+            } else if (unknownLinks.isNotEmpty() && VISIT in seen) {
+                // "that's the link, log in here" about a site that is not a known official one is a
+                // warning even when the link engine has nothing against it (captions garble names)
+                seen += DICTATED_LINK
+                val lv = if (level >= Level.SUSPICIOUS) Level.DANGEROUS else Level.SUSPICIOUS
+                if (lv > level) level = lv
+            }
+        }
         llm?.let { j ->
             // the AI alone reaches at most amber; it can lift amber (rules or the call model already
             // heard warning signs) to red, but a call with no other signal never goes red on its word
@@ -204,5 +248,10 @@ class CallSession(
         if (level > latched) latched = level
         if (latched == Level.DANGEROUS) level = Level.DANGEROUS  // no flicker once red
         return s.copy(level = level)
+    }
+
+    companion object {
+        const val DICTATED_LINK = "dictated_link"
+        private const val VISIT = "visit_link"
     }
 }
