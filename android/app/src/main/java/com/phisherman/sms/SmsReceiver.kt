@@ -44,6 +44,7 @@ object SmsHandler {
         scope.launch {
             try {
                 var v = SmsAnalyser.analyse(app, sender, body, isTrustedName(sender, sourceApp))
+                if (EmailRules.isEmail(sender, sourceApp)) v = EmailRules.apply(app, v, sender, body)
                 if (sourceApp != null) v = v.copy(subject = "$sender · $sourceApp")
                 Log.d(TAG, "verdict ${v.level} ${v.ruleHits} from ${sourceApp ?: "SMS"}")
                 if (recordSafe || v.level != Level.SAFE) DecisionLog.record(app, v)

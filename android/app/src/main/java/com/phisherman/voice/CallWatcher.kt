@@ -5,11 +5,13 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
+import android.provider.Settings
 import android.telephony.TelephonyCallback
 import android.telephony.TelephonyManager
 import android.util.Log
 import androidx.core.content.ContextCompat
 import com.phisherman.data.Prefs
+import com.phisherman.sms.SmsNotifier
 
 /**
  * Automatic call guard: when a phone call starts, start listening; when it ends, stop.
@@ -56,7 +58,19 @@ object CallWatcher {
     }
 
     private fun startGuard(ctx: Context) {
-        if (CallGuard.state.value.mode != GuardMode.OFF) return
+        val mode = CallGuard.state.value.mode
+        if (mode == GuardMode.MIC && CallGuardService.running) { Log.d(TAG, "already listening"); return }
+        // A demo script, or a session whose service died, must not block the real call.
+        if (mode != GuardMode.OFF) CallGuard.end(ctx)
+        // Android 14+ gives a microphone service started from the background no mic access.
+        // With "display over other apps" we briefly bring a transparent activity to the front
+        // and start the service from there, so it counts as started from the foreground.
+        if (Settings.canDrawOverlays(ctx)) {
+            Log.i(TAG, "starting call guard via foreground starter")
+            SmsNotifier.launchOverOtherApps(ctx, Intent(ctx, CallGuardStarterActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NO_ANIMATION))
+            return
+        }
         try {
             ContextCompat.startForegroundService(ctx, Intent(ctx, CallGuardService::class.java).setAction(CallGuardService.ACTION_AUTO))
         } catch (e: Exception) {

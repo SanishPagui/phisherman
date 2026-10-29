@@ -45,6 +45,8 @@ class CallGuardService : Service() {
         if (!listening) {
             CallGuard.begin(this, GuardMode.MIC)
             listening = true
+            running = true
+            Log.i(TAG, "listening (${intent?.action ?: "manual"})")
             startListening()
         }
         return START_NOT_STICKY
@@ -100,7 +102,10 @@ class CallGuardService : Service() {
     private fun rawText(b: Bundle): String? = b.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)?.firstOrNull()?.takeIf { it.isNotBlank() }
 
     private fun stopGuard() {
+        // Near -100 dB for a whole call means Android gave us silence while the call was active.
+        Log.i(TAG, "stopped, loudest mic input %.0f dB".format(CallGuard.state.value.peakDb))
         listening = false
+        running = false
         main.removeCallbacksAndMessages(null)
         recognizer?.destroy()
         recognizer = null
@@ -119,5 +124,9 @@ class CallGuardService : Service() {
         const val ACTION_STOP = "com.phisherman.voice.STOP"
         const val ACTION_ACK = "com.phisherman.voice.ACK"
         const val ACTION_AUTO = "com.phisherman.voice.AUTO"  // started by CallWatcher when a call begins
+
+        /** True while a microphone session is live; lets CallWatcher detect a stale GuardState. */
+        @Volatile var running = false
+            private set
     }
 }

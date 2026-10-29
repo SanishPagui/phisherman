@@ -1,0 +1,91 @@
+{
+  "generated": "2026-10-28",
+  "link": {
+    "model": "RandomForest(n_estimators=120, max_depth=14)",
+    "dataset": "URL-Phish v2 + pirocheto/phishing-url (split by registrable domain)",
+    "unseen_dataset": "PhiUSIIL (UCI 967), domains seen in training removed",
+    "test": {
+      "precision": 0.9002,
+      "recall": 0.8332,
+      "fpr": 0.0213,
+      "f1": 0.8654,
+      "n": 25156,
+      "n_phishing": 4718,
+      "tp": 3931,
+      "fp": 436,
+      "fn": 787,
+      "tn": 20002
+    },
+    "test_dangerous": {
+      "precision": 0.9802,
+      "recall": 0.5244,
+      "fpr": 0.0024,
+      "f1": 0.6832,
+      "n": 25156,
+      "n_phishing": 4718,
+      "tp": 2474,
+      "fp": 50,
+      "fn": 2244,
+      "tn": 20388
+    },
+    "unseen": {
+      "precision": 0.9806,
+      "recall": 0.3161,
+      "fpr": 0.0032,
+      "f1": 0.478,
+      "n": 184543,
+      "n_phishing": 63007,
+      "tp": 19914,
+      "fp": 394,
+      "fn": 43093,
+      "tn": 121142
+    },
+    "hard_negatives": {
+      "n": 40,
+      "fpr_engine": 0.0
+    }
+  },
+  "sms": {
+    "dataset": "UCI SMS Spam Collection (spam treated as scam) + ml/sms_india_synthetic.tsv, hand-written, all synthetic",
+    "test": {
+      "precision": 0.9452,
+      "recall": 0.965,
+      "fpr": 0.0086,
+      "f1": 0.955,
+      "n": 1077,
+      "n_phishing": 143,
+      "tp": 138,
+      "fp": 8,
+      "fn": 5,
+      "tn": 926
+    },
+    "uci": {
+      "precision": 0.9453,
+      "recall": 0.968,
+      "fpr": 0.0077,
+      "f1": 0.9565,
+      "n": 1029,
+      "n_phishing": 125,
+      "tp": 121,
+      "fp": 7,
+      "fn": 4,
+      "tn": 897
+    },
+    "india": {
+      "precision": 0.9444,
+      "recall": 0.9444,
+      "fpr": 0.0333,
+      "f1": 0.9444,
+      "n": 48,
+      "n_phishing": 18,
+      "tp": 17,
+      "fp": 1,
+      "fn": 1,
+      "tn": 29
+    },
+    "promotional": {
+      "n": 14,
+      "flagged": 0
+    }
+  }
+}

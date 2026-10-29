@@ -1,0 +1,19 @@
+﻿{
+  "version": "email-1",
+  "freeMailDomains": [
+    "gmail.com", "googlemail.com", "yahoo.com", "yahoo.co.in", "ymail.com", "rediffmail.com",
+    "outlook.com", "hotmail.com", "live.com", "msn.com", "aol.com", "icloud.com", "me.com",
+    "proton.me", "protonmail.com", "zoho.com", "gmx.com", "mail.com", "yandex.com"
+  ],
+  "attachmentLures": [
+    "see attached", "find attached", "attached (invoice|bill|receipt|statement|document|file)",
+    "open the attachment", "download the attachment", "enable (content|editing|macros)",
+    "\\.(html?|htm|zip|rar|iso|exe|scr|apk|js|vbs)\\b"
+  ],
+  "credentialLures": [
+    "verify your (account|identity|email|details)", "confirm your (password|account|details|identity)",
+    "(re-?)?activate your account", "unusual sign-?in", "suspicious (activity|login|sign-?in)",
+    "your (mailbox|inbox) is (full|almost full)", "update your (payment|billing|card) (details|information|method)",
+    "password (will )?expires?", "sign in to (continue|avoid|restore)", "account (has been )?(locked|suspended|limited)"
+  ]
+}

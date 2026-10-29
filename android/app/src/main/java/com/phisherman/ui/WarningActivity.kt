@@ -1,4 +1,4 @@
-package com.phisherman.ui
+﻿package com.phisherman.ui
 
 import android.content.Context
 import android.content.Intent
@@ -8,7 +8,24 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Icon
+import androidx.compose.ui.res.painterResource
+import com.phisherman.R
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -66,6 +83,10 @@ class WarningActivity : ComponentActivity() {
         val body = intent.getStringExtra(EXTRA_BODY)
         if (url.isEmpty() && body == null) return finish()
         decisionId = savedInstanceState?.getLong(STATE_ID) ?: 0L
+        // The warning is on screen, so its fallback notification is no longer needed.
+        if (intent.hasExtra(EXTRA_NOTIFICATION_ID)) {
+            androidx.core.app.NotificationManagerCompat.from(this).cancel(intent.getIntExtra(EXTRA_NOTIFICATION_ID, 0))
+        }
         // SMS verdicts are already logged by the receiver; link warnings log here
         if (decisionId == 0L && verdict.channel == Channel.LINK) {
             lifecycleScope.launch { decisionId = DecisionLog.record(this@WarningActivity, verdict) }
@@ -79,7 +100,8 @@ class WarningActivity : ComponentActivity() {
                 onGoBack = { act("BACK"); finish() },
                 onReport = {
                     act("REPORTED")
-                    Toast.makeText(this, "Report screen arrives in Phase 5", Toast.LENGTH_SHORT).show()
+                    startActivity(ReportActivity.intent(this, verdict))
+                    finish()
                 },
                 onOpenAnyway = {
                     act("OPEN_ANYWAY")
@@ -113,6 +135,7 @@ class WarningActivity : ComponentActivity() {
         private const val EXTRA_VERDICT = "verdict"
         private const val EXTRA_BODY = "body"
         private const val STATE_ID = "decision_id"
+        const val EXTRA_NOTIFICATION_ID = "notification_id"
 
         /** Warning for a message (opened from the SMS notification or the paste box). */
         fun smsIntent(ctx: Context, body: String, verdict: Verdict): Intent =
@@ -131,11 +154,12 @@ class WarningActivity : ComponentActivity() {
     }
 }
 
-private val Danger = Color(0xFFB3261E)
-private val DangerDark = Color(0xFF410E0B)
-private val Amber = Color(0xFFB26A00)
-private val AmberDark = Color(0xFF3D2500)
+private val DangerTop = Color(0xFFE5484D)
+private val DangerBottom = Color(0xFF7F0D14)
+private val AmberTop = Color(0xFFD98A00)
+private val AmberBottom = Color(0xFF6B3F00)
 
+/** Red (dangerous) or amber (suspicious) full-screen warning. The safest action is the big button. */
 @Composable
 private fun WarningScreen(
     url: String,
@@ -148,8 +172,8 @@ private fun WarningScreen(
     onOpenAnyway: () -> Unit,
 ) {
     val dangerous = verdict.level == Level.DANGEROUS
-    val accent = if (dangerous) Danger else Amber
-    val bg = if (dangerous) DangerDark else AmberDark
+    val top = if (dangerous) DangerTop else AmberTop
+    val bottom = if (dangerous) DangerBottom else AmberBottom
     var confirm by remember { mutableStateOf(false) }
     BackHandler(onBack = onGoBack)
 
@@ -158,83 +182,125 @@ private fun WarningScreen(
     val host = verdict.subject
     val reg = if (isSms) host else LinkAnalyser.registrableDomain(host)
     val prefix = if (isSms) "" else host.removeSuffix(reg)
+    val pulse by rememberInfiniteTransition(label = "pulse").animateFloat(
+        initialValue = 1f, targetValue = 1.12f,
+        animationSpec = infiniteRepeatable(tween(700), RepeatMode.Reverse), label = "scale",
+    )
 
     Column(
-        Modifier.fillMaxSize().background(bg).safeDrawingPadding().verticalScroll(rememberScrollState()).padding(24.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        Modifier
+            .fillMaxSize()
+            .background(Brush.verticalGradient(listOf(top, bottom)))
+            .safeDrawingPadding()
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 24.dp, vertical = 12.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            Text("Phisherman", color = Color.White.copy(alpha = 0.7f), fontSize = 14.sp, modifier = Modifier.weight(1f))
+            Text("Phisherman", color = Color.White.copy(alpha = 0.75f), fontSize = 14.sp,
+                fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f))
             TextButton(onClick = onToggleLanguage) { Text(if (hindi) "English" else "हिंदी", color = Color.White) }
         }
-        Text("⚠", fontSize = 56.sp, color = Color.White)
+        Spacer(Modifier.height(20.dp))
+        Icon(painterResource(R.drawable.ic_shield), null, tint = Color.White, modifier = Modifier.size(104.dp).scale(pulse))
+        Spacer(Modifier.height(14.dp))
         Text(
             when {
-                isSms && dangerous -> t("Scam message detected", "धोखाधड़ी वाला संदेश")
-                isSms -> t("This message looks suspicious", "यह संदेश संदिग्ध लगता है")
-                dangerous -> t("Dangerous link blocked", "ख़तरनाक लिंक रोका गया")
-                else -> t("This link looks unsafe", "यह लिंक असुरक्षित लगता है")
+                isSms && dangerous -> t("PHISHING ALERT", "फ़िशिंग चेतावनी")
+                isSms -> t("SUSPICIOUS MESSAGE", "संदिग्ध संदेश")
+                dangerous -> t("DANGEROUS LINK BLOCKED", "ख़तरनाक लिंक रोका गया")
+                else -> t("THIS LINK LOOKS UNSAFE", "यह लिंक असुरक्षित लगता है")
             },
-            color = Color.White, fontSize = 30.sp, fontWeight = FontWeight.Bold, lineHeight = 36.sp,
+            color = Color.White, fontSize = 32.sp, fontWeight = FontWeight.ExtraBold, lineHeight = 38.sp,
+            letterSpacing = 1.sp, textAlign = TextAlign.Center,
         )
+        Spacer(Modifier.height(6.dp))
+        Text(
+            if (isSms) t("This message looks like a scam", "यह संदेश स्कैम जैसा लगता है")
+            else t("We stopped this link before it opened", "हमने यह लिंक खुलने से पहले रोक दिया"),
+            color = Color.White.copy(alpha = 0.9f), fontSize = 17.sp, textAlign = TextAlign.Center,
+        )
+
+        // Who sent it / where the link really goes: registrable domain in bold.
+        Spacer(Modifier.height(18.dp))
         Text(
             buildAnnotatedString {
-                if (isSms) withStyle(SpanStyle(color = Color.White.copy(alpha = 0.6f))) { append(t("From ", "भेजने वाला ")) }
-                withStyle(SpanStyle(color = Color.White.copy(alpha = 0.6f))) { append(prefix) }
+                if (isSms) withStyle(SpanStyle(color = Color.White.copy(alpha = 0.7f))) { append(t("From ", "भेजने वाला ")) }
+                withStyle(SpanStyle(color = Color.White.copy(alpha = 0.7f))) { append(prefix) }
                 withStyle(SpanStyle(color = Color.White, fontWeight = FontWeight.Bold)) { append(reg.ifEmpty { host }) }
             },
-            fontSize = 24.sp,
+            fontSize = 18.sp, textAlign = TextAlign.Center,
+            modifier = Modifier
+                .clip(RoundedCornerShape(50))
+                .background(Color.White.copy(alpha = 0.18f))
+                .padding(horizontal = 18.dp, vertical = 10.dp),
         )
-        if (body != null) {
-            Text(
-                body.take(300),
-                color = Color.White.copy(alpha = 0.85f), fontSize = 15.sp,
-                modifier = Modifier.fillMaxWidth().background(Color.White.copy(alpha = 0.1f), RoundedCornerShape(12.dp)).padding(12.dp),
-            )
-        }
-        Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            Text(
-                t("Risk ${verdict.score}/100 · ", "जोखिम ${verdict.score}/100 · ") +
-                    if (dangerous) t("Dangerous", "ख़तरनाक") else t("Suspicious", "संदिग्ध"),
-                color = Color.White, fontWeight = FontWeight.SemiBold,
-            )
-            LinearProgressIndicator(
-                progress = { verdict.score / 100f },
-                modifier = Modifier.fillMaxWidth().height(10.dp),
-                color = accent, trackColor = Color.White.copy(alpha = 0.2f),
-            )
-            Text(t("Estimated risk, not a guarantee", "अनुमानित जोखिम, गारंटी नहीं"), color = Color.White.copy(alpha = 0.6f), fontSize = 12.sp)
-        }
-        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text(t("Why we warned you", "हमने चेतावनी क्यों दी"), color = Color.White, fontWeight = FontWeight.SemiBold)
-            verdict.reasons.forEach { r ->
-                Text("•  " + if (hindi) (r.textHi ?: r.textEn) else r.textEn, color = Color.White, fontSize = 16.sp)
+
+        if (verdict.reasons.isNotEmpty()) {
+            Spacer(Modifier.height(20.dp))
+            Column(
+                Modifier
+                    .fillMaxWidth()
+                    .background(Color.Black.copy(alpha = 0.22f), RoundedCornerShape(20.dp))
+                    .padding(20.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                Text(t("Why we warned you", "हमने चेतावनी क्यों दी"), color = Color.White.copy(alpha = 0.8f),
+                    fontSize = 13.sp, fontWeight = FontWeight.SemiBold, letterSpacing = 0.8.sp)
+                verdict.reasons.take(3).forEach { r ->
+                    Row(verticalAlignment = Alignment.Top) {
+                        Box(Modifier.padding(top = 8.dp).size(8.dp).background(Color.White, CircleShape))
+                        Spacer(Modifier.width(12.dp))
+                        Text(if (hindi) (r.textHi ?: r.textEn) else r.textEn, color = Color.White, fontSize = 16.sp)
+                    }
+                }
             }
         }
-        Spacer(Modifier.height(8.dp))
+
+        if (!body.isNullOrBlank()) {
+            Spacer(Modifier.height(14.dp))
+            Text(
+                body.take(300),
+                color = Color.White.copy(alpha = 0.8f), fontSize = 14.sp,
+                modifier = Modifier.fillMaxWidth().background(Color.White.copy(alpha = 0.1f), RoundedCornerShape(14.dp)).padding(14.dp),
+            )
+        }
+
+        Spacer(Modifier.height(18.dp))
+        Text(
+            if (isSms) t("Do NOT click links, call back, or share any OTP, PIN or card details.",
+                "लिंक पर क्लिक न करें, वापस कॉल न करें, और OTP, PIN या कार्ड की जानकारी न दें।")
+            else t("Never enter your OTP, PIN, password or card details on this site.",
+                "इस साइट पर कभी भी अपना OTP, PIN, पासवर्ड या कार्ड की जानकारी न डालें।"),
+            color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp, textAlign = TextAlign.Center,
+        )
+
+        Spacer(Modifier.height(24.dp))
         Button(
             onClick = onGoBack,
-            modifier = Modifier.fillMaxWidth().height(64.dp),
-            shape = RoundedCornerShape(16.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color.White, contentColor = bg),
+            modifier = Modifier.fillMaxWidth().height(62.dp),
+            shape = RoundedCornerShape(18.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = Color.White, contentColor = bottom),
         ) {
-            Text(if (isSms) t("Got it, I won't respond", "समझ गया, जवाब नहीं दूँगा") else t("Go back (safe)", "वापस जाएँ (सुरक्षित)"),
-                fontSize = 20.sp, fontWeight = FontWeight.Bold)
+            Text(if (isSms) t("I understand — I won't respond", "समझ गया — जवाब नहीं दूँगा") else t("Go back (safe)", "वापस जाएँ (सुरक्षित)"),
+                fontSize = 18.sp, fontWeight = FontWeight.Bold)
         }
-        if (isSms) {
-            Text(t("Do not click links in it, call back, or share OTP, PIN or card details.",
-                "इसके लिंक पर क्लिक न करें, वापस कॉल न करें, और OTP, PIN या कार्ड की जानकारी न दें।"),
-                color = Color.White.copy(alpha = 0.8f), fontSize = 14.sp)
-        }
-        OutlinedButton(onClick = onReport, modifier = Modifier.fillMaxWidth().height(52.dp), shape = RoundedCornerShape(16.dp)) {
+        Spacer(Modifier.height(10.dp))
+        OutlinedButton(
+            onClick = onReport,
+            modifier = Modifier.fillMaxWidth().height(52.dp),
+            shape = RoundedCornerShape(18.dp),
+            border = BorderStroke(1.dp, Color.White.copy(alpha = 0.7f)),
+        ) {
             Text(if (isSms) t("Report this message", "इस संदेश की शिकायत करें") else t("Report this link", "इस लिंक की शिकायत करें"),
                 color = Color.White, fontSize = 16.sp)
         }
         if (!isSms) {
-            TextButton(onClick = { confirm = true }, modifier = Modifier.align(Alignment.CenterHorizontally)) {
+            TextButton(onClick = { confirm = true }) {
                 Text(t("Open anyway", "फिर भी खोलें"), color = Color.White.copy(alpha = 0.7f), fontSize = 14.sp)
             }
         }
+        Spacer(Modifier.height(16.dp))
     }
 
     if (confirm) {
@@ -248,3 +314,4 @@ private fun WarningScreen(
         )
     }
 }
+

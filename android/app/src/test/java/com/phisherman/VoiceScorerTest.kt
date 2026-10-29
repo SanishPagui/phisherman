@@ -53,6 +53,18 @@ class VoiceScorerTest {
         assertTrue(bad.joinToString("\n"), bad.isEmpty())
     }
 
+    /** Without speakerphone the mic hears only the user: their own words must be enough to turn red. */
+    @Test
+    fun userGivingAwayACodeTurnsRedOnItsOwn() {
+        val sc = VoiceScorer(rules)
+        for (said in listOf("okay sir my OTP is 4 5 8 2", "haan ruko otp bata raha hoon", "okay I am installing AnyDesk now",
+                "I have transferred the money", "मैं पैसे भेज रहा हूँ")) {
+            assertEquals(said, Level.DANGEROUS, sc.score(said).level)
+        }
+        // A bank's automated OTP call reads the code out; that is delivery, not the user giving it away.
+        assertTrue(sc.score("your OTP is 4 5 8 2, it is valid for ten minutes").level < Level.DANGEROUS)
+    }
+
     @Test
     fun negatedCredentialIsNotARequest() {
         val sc = VoiceScorer(rules)

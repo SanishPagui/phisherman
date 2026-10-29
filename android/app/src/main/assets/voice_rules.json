@@ -9,6 +9,13 @@
   ],
   "categories": [
     {
+      "id": "disclosure", "weight": 70,
+      "en": "You are about to share an OTP, PIN, card details or money with the caller",
+      "hi": "आप कॉल करने वाले को OTP, PIN, कार्ड की जानकारी या पैसे देने वाले हैं",
+      "latin": ["my otp is", "my otp number is", "my pin is", "my upi pin is", "my atm pin is", "my cvv is", "my card number is", "my card number", "my password is", "i got the otp", "i received the otp", "i'll tell you the otp", "i will tell you the otp", "installing anydesk", "installed anydesk", "install anydesk", "opening anydesk", "installing any desk", "installed any desk", "installing teamviewer", "installed teamviewer", "transfer the money", "transferring the money", "transferred the money", "transfer the amount", "transferred the amount", "i will send the money", "i am sending the money", "i have sent the money", "i sent the money", "sending the money now", "i am paying", "i have paid", "i will pay now", "scanning the qr", "otp hai", "otp bata raha", "otp bata rahi", "otp bhej raha", "otp bhej rahi", "otp de raha", "pin hai", "pin bata raha", "card number hai", "cvv hai", "anydesk install kar", "paise bhej raha", "paise bhej rahi", "paise bhej diye", "transfer kar raha", "transfer kar diya"],
+      "devanagari": ["ओटीपी है", "ओटीपी बता", "पिन है", "पिन बता", "कार्ड नंबर है", "पैसे भेज रहा", "पैसे भेज रही", "पैसे भेज दिए", "ट्रांसफर कर रहा", "ट्रांसफर कर दिया"]
+    },
+    {
       "id": "credential", "weight": 40,
       "en": "Asks for an OTP, PIN, CVV or password",
       "hi": "OTP, PIN, CVV या पासवर्ड माँग रहा है",

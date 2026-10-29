@@ -15,6 +15,10 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <!-- automatic call guard: call state only (ringing / in call / idle), never the number -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!-- scam-message warnings take over the screen: over the lock screen (full-screen intent)
+         and over other apps (display over other apps, granted by the user) -->
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <!-- package visibility: find the real browsers to forward safe links to -->
     <queries>
@@ -93,15 +97,30 @@
             android:exported="false"
             android:launchMode="singleTop" />
 
+        <!-- invisible: starts the call guard from the foreground when a call begins -->
+        <activity
+            android:name=".voice.CallGuardStarterActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:taskAffinity="com.phisherman.callstarter"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
         <service
             android:name=".voice.CallGuardService"
             android:exported="false"
             android:foregroundServiceType="microphone" />
 
         <activity
+            android:name=".ui.ReportActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".ui.WarningActivity"
             android:exported="false"
             android:excludeFromRecents="true"
+            android:showWhenLocked="true"
+            android:turnScreenOn="true"
             android:taskAffinity="com.phisherman.warning" />
     </application>
 
