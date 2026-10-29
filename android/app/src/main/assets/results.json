@@ -21,6 +21,21 @@
         "fn": 1163,
         "tn": 20441
       },
+      "red": {
+        "set": "Same websites, red (dangerous) warnings only",
+        "n": 24071,
+        "scams": 3311,
+        "precision": 0.9182,
+        "recall": 0.4509,
+        "fdr": 0.4509,
+        "accuracy": 0.9189,
+        "f1": 0.6048,
+        "fpr": 0.0064,
+        "tp": 1493,
+        "fp": 133,
+        "fn": 1818,
+        "tn": 20627
+      },
       "more": [
         {
           "set": "Held-out PhiUSIIL websites (homepages)",
@@ -130,6 +145,47 @@
       ]
     },
     {
+      "id": "email",
+      "name": "Email",
+      "icon": "email",
+      "headline": {
+        "set": "Our 60 hand-written emails (30 phishing), never trained on",
+        "n": 60,
+        "scams": 30,
+        "precision": 0.7297,
+        "recall": 0.9,
+        "fdr": 0.9,
+        "accuracy": 0.7833,
+        "f1": 0.806,
+        "fpr": 0.3333,
+        "tp": 27,
+        "fp": 10,
+        "fn": 3,
+        "tn": 20
+      },
+      "red": {
+        "set": "Same emails, red (dangerous) warnings only",
+        "n": 60,
+        "scams": 30,
+        "precision": 1.0,
+        "recall": 0.6,
+        "fdr": 0.6,
+        "accuracy": 0.8,
+        "f1": 0.75,
+        "fpr": 0.0,
+        "tp": 18,
+        "fp": 0,
+        "fn": 12,
+        "tn": 30
+      },
+      "more": [],
+      "notes": [
+        "Sender + subject + preview, as the app reads them from mail notifications and the open email",
+        "Message engine only. In the app, an email flagged on wording alone goes to the on-device AI, which clears genuine newsletters, so real precision is higher than this",
+        "Small synthetic set: treat as indicative"
+      ]
+    },
+    {
       "id": "ai",
       "name": "On-device AI",
       "icon": "ai",
@@ -203,6 +259,21 @@
         "fp": 4,
         "fn": 0,
         "tn": 2825
+      },
+      "red": {
+        "set": "Same calls, red (dangerous) warnings only",
+        "n": 3090,
+        "scams": 261,
+        "precision": 1.0,
+        "recall": 1.0,
+        "fdr": 1.0,
+        "accuracy": 1.0,
+        "f1": 1.0,
+        "fpr": 0.0,
+        "tp": 261,
+        "fp": 0,
+        "fn": 0,
+        "tn": 2829
       },
       "more": [
         {
@@ -392,5 +463,20 @@
       }
     ],
     "n": 65391
+  },
+  "overall": {
+    "set": "All channels, headline test sets combined",
+    "n": 29804,
+    "scams": 3994,
+    "precision": 0.8905,
+    "recall": 0.7068,
+    "fdr": 0.7068,
+    "accuracy": 0.9491,
+    "f1": 0.7881,
+    "fpr": 0.0134,
+    "tp": 2823,
+    "fp": 347,
+    "fn": 1171,
+    "tn": 25463
   }
 }

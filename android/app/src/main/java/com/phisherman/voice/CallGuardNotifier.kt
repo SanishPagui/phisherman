@@ -1,5 +1,6 @@
 package com.phisherman.voice
 
+import com.phisherman.ui.theme.I18n
 import android.Manifest
 import android.app.Notification
 import android.app.NotificationChannel
@@ -23,12 +24,12 @@ object CallGuardNotifier {
     fun ensureChannels(ctx: Context) {
         val nm = ctx.getSystemService(NotificationManager::class.java)
         if (nm.getNotificationChannel(CH_ONGOING) == null) {
-            nm.createNotificationChannel(NotificationChannel(CH_ONGOING, "Call guard (listening)", NotificationManager.IMPORTANCE_LOW)
-                .apply { description = "Shown while Phisherman listens to a call on this phone" })
+            nm.createNotificationChannel(NotificationChannel(CH_ONGOING, I18n.t("Call guard (listening)"), NotificationManager.IMPORTANCE_LOW)
+                .apply { description = I18n.t("Shown while Phisherman listens to a call on this phone") })
         }
         if (nm.getNotificationChannel(CH_ALERT) == null) {
-            nm.createNotificationChannel(NotificationChannel(CH_ALERT, "Scam call alerts", NotificationManager.IMPORTANCE_HIGH)
-                .apply { description = "Shown when a call sounds like a scam"; enableVibration(false) })  // CallAlerts vibrates
+            nm.createNotificationChannel(NotificationChannel(CH_ALERT, I18n.t("Scam call alerts"), NotificationManager.IMPORTANCE_HIGH)
+                .apply { description = I18n.t("Shown when a call sounds like a scam"); enableVibration(false) })  // CallAlerts vibrates
         }
     }
 
@@ -42,13 +43,13 @@ object CallGuardNotifier {
     fun ongoing(ctx: Context, level: Level): Notification {
         ensureChannels(ctx)
         val text = when (level) {
-            Level.DANGEROUS -> "Scam signs heard. Hang up. Never share OTP or PIN."
-            Level.SUSPICIOUS -> "Some warning signs heard. Be careful."
-            Level.SAFE -> "Checking what is said, on this phone. Nothing is recorded."
+            Level.DANGEROUS -> I18n.t("Scam signs heard. Hang up. Never share OTP or PIN.")
+            Level.SUSPICIOUS -> I18n.t("Some warning signs heard. Be careful.")
+            Level.SAFE -> I18n.t("Checking what is said, on this phone. Nothing is recorded.")
         }
         return NotificationCompat.Builder(ctx, CH_ONGOING)
             .setSmallIcon(R.drawable.ic_shield)
-            .setContentTitle("Phisherman call guard is listening")
+            .setContentTitle(I18n.t("Phisherman call guard is listening"))
             .setContentText(text)
             .setOngoing(true)
             .setContentIntent(openGuard(ctx))
@@ -66,13 +67,13 @@ object CallGuardNotifier {
         ensureChannels(ctx)
         val n = NotificationCompat.Builder(ctx, CH_ALERT)
             .setSmallIcon(R.drawable.ic_shield)
-            .setContentTitle("⚠ This call sounds like a scam")
-            .setContentText("Hang up. Never share OTP or PIN.")
-            .setStyle(NotificationCompat.BigTextStyle().bigText("Hang up. Never share OTP, PIN or card details, and do not install any app.\n${reason ?: ""}"))
+            .setContentTitle(I18n.t("⚠ This call sounds like a scam"))
+            .setContentText(I18n.t("Hang up. Never share OTP or PIN."))
+            .setStyle(NotificationCompat.BigTextStyle().bigText(I18n.t("Hang up. Never share OTP, PIN or card details, and do not install any app.") + "\n${reason ?: ""}"))
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setCategory(NotificationCompat.CATEGORY_ALARM)
             .setContentIntent(openGuard(ctx))
-            .addAction(0, "I'm safe, stop alert", action(ctx, CallGuardService.ACTION_ACK, 3))
+            .addAction(0, I18n.t("I'm safe, stop alert"), action(ctx, CallGuardService.ACTION_ACK, 3))
             .setAutoCancel(true)
             .build()
         NotificationManagerCompat.from(ctx).notify(RED_ID, n)
@@ -84,8 +85,8 @@ object CallGuardNotifier {
         ensureChannels(ctx)
         val n = NotificationCompat.Builder(ctx, CH_ALERT)
             .setSmallIcon(R.drawable.ic_shield)
-            .setContentTitle("Call guard: tap to start listening")
-            .setContentText("Never share OTP, PIN or card details on a call.")
+            .setContentTitle(I18n.t("Call guard: tap to start listening"))
+            .setContentText(I18n.t("Never share OTP, PIN or card details on a call."))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setContentIntent(PendingIntent.getActivity(ctx, 5,
                 Intent(ctx, CallGuardActivity::class.java).putExtra(CallGuardActivity.EXTRA_START, true)

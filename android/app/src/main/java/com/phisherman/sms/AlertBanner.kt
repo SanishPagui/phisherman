@@ -1,5 +1,6 @@
 package com.phisherman.sms
 
+import com.phisherman.ui.theme.I18n
 import android.accessibilityservice.AccessibilityService
 import android.content.Intent
 import android.graphics.Color
@@ -29,9 +30,9 @@ class AlertBanner(private val service: AccessibilityService) {
     private var view: View? = null
 
     fun show(body: String, v: Verdict) {
-        val title = if (v.level == Level.DANGEROUS) "⚠ Scam message from ${v.subject}" else "Suspicious message from ${v.subject}"
-        warn(title, v.reasons.firstOrNull()?.textEn ?: "This message looks risky",
-            "Don't click links or share OTP, PIN or card details.", v.level) { openDetails(body, v) }
+        val title = if (v.level == Level.DANGEROUS) I18n.t("⚠ Scam message from ${v.subject}") else I18n.t("Suspicious message from ${v.subject}")
+        warn(title, v.reasons.firstOrNull()?.let { I18n.reason(it) } ?: I18n.t("This message looks risky"),
+            I18n.t("Don't click links or share OTP, PIN or card details."), v.level) { openDetails(body, v) }
     }
 
     /** Any warning banner; onDetails = null hides the VIEW DETAILS action. */
@@ -55,7 +56,7 @@ class AlertBanner(private val service: AccessibilityService) {
         val row = LinearLayout(service).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.END; setPadding(0, dp(8), 0, 0) }
         row.addView(text("DISMISS", 14f, bold = true).apply { setPadding(dp(12), dp(6), dp(12), dp(6)); setOnClickListener { hide() } })
         if (onDetails != null) {
-            row.addView(text("VIEW DETAILS", 14f, bold = true).apply {
+            row.addView(text(I18n.t("VIEW DETAILS"), 14f, bold = true).apply {
                 setPadding(dp(12), dp(6), dp(4), dp(6))
                 setOnClickListener { onDetails() }
             })

@@ -1,7 +1,7 @@
 """Collect every measured number into android/app/src/main/assets/results.json (PS4 11.3).
 
 The app's Results screen and the slides read this file, so every figure has its test set and N.
-Run after train_link.py, eval_link_extras.py, train_sms.py and train_llm.py:
+Run after train_link.py, eval_link_extras.py, train_sms.py, train_llm.py and email_eval.py:
     python eval_report.py
 """
 import json
@@ -52,11 +52,28 @@ def link_curve(n_points=19):
     return out, int(len(y))
 
 
+def overall(channels):
+    """All channels together: the headline confusion counts summed (each item counted once)."""
+    m = {k: sum(c["headline"][k] for c in channels) for k in ("tp", "fp", "fn", "tn")}
+    return summary(m, "All channels, headline test sets combined")
+
+
+def previous_curve():
+    """The threshold curve from the last results.json, for machines without the raw datasets."""
+    old = json.load(open(ASSETS / "results.json", encoding="utf-8"))["link_threshold"]
+    return old["curve"], old["n"]
+
+
 def main():
     link = json.load(open(ML / "results_link.json"))
     sms = json.load(open(ML / "results_sms.json", encoding="utf-8"))
     llm = json.load(open(ML / "results_llm.json", encoding="utf-8"))
-    curve, n_curve = link_curve()
+    email = json.load(open(ML / "results_email.json", encoding="utf-8"))  # written by email_eval.py
+    try:
+        curve, n_curve = link_curve()
+    except FileNotFoundError:  # data/raw/ (the public URL datasets) is not on this machine
+        print("raw URL datasets missing: keeping the link threshold curve from the current results.json")
+        curve, n_curve = previous_curve()
     hn = link["extras"]["hard_negatives"]
     links_ok = sum(t["pass"] for t in link["extras"]["test_links"])
     promo = sms["engine_promotional_fpr"]
@@ -72,6 +89,7 @@ def main():
         "channels": [
             {"id": "link", "name": "Links", "icon": "link",
              "headline": summary(link["test_real_paths"]["suspicious"], "Held-out websites with real paths (URL-Phish + pirocheto)"),
+             "red": summary(link["test_real_paths"]["dangerous"], "Same websites, red (dangerous) warnings only"),
              "more": [summary(link["test_by_source"]["phiusiil"], "Held-out PhiUSIIL websites (homepages)"),
                       summary(link["test"]["suspicious"], "All held-out websites (3 datasets)")],
              "notes": [f"False alarms on real bank / login pages: {hn['fpr_engine'] * 100:.1f}% of {hn['n']}",
@@ -83,6 +101,14 @@ def main():
                       summary(sms["engine"]["uci"], "UCI SMS (real messages)"),
                       summary(sms["engine"]["india_synthetic"], "Indian / Hinglish messages (hand-written)")],
              "notes": [f"Promotional messages flagged: {promo['flagged']} of {promo['n']}"]},
+            {"id": "email", "name": "Email", "icon": "email",
+             "headline": summary(email["engine"]["alert"], "Our 60 hand-written emails (30 phishing), never trained on"),
+             "red": summary(email["engine"]["red"], "Same emails, red (dangerous) warnings only"),
+             "more": [],
+             "notes": ["Sender + subject + preview, as the app reads them from mail notifications and the open email",
+                       "Message engine only. In the app, an email flagged on wording alone goes to the on-device AI, "
+                       "which clears genuine newsletters, so real precision is higher than this",
+                       "Small synthetic set: treat as indicative"]},
             {"id": "ai", "name": "On-device AI", "icon": "ai",
              "headline": summary(llm["fine_tuned"]["all"], "All held-out sets"),
              "more": [summary(llm["fine_tuned"]["india"], "Indian SMS"),
@@ -91,6 +117,7 @@ def main():
                        f"Same model before fine-tuning caught {llm['base']['all']['recall'] * 100:.0f}% (could not follow the task)"]},
             {"id": "calls", "name": "Calls", "icon": "call",
              "headline": summary(voice["all"]["combined"]["alert"], "Held-out calls + everyday conversations, any alert"),
+             "red": summary(voice["all"]["combined"]["red"], "Same calls, red (dangerous) warnings only"),
              "more": [summary(voice["all"]["rules"]["alert"], "Same calls, phrase rules only (before training)"),
                       summary(voice["ysangam"]["combined"]["alert"], "Hinglish scam calls (unseen templates)"),
                       summary(voice["bothbosu"]["combined"]["alert"], "English scam dialogues (synthetic)"),
@@ -101,10 +128,12 @@ def main():
         ],
         "link_threshold": {"chosen": link["thresholds"]["suspicious"], "curve": curve, "n": n_curve},
     }
+    # the on-device AI is a second opinion on items the other channels already count, so it is
+    # left out of the overall row to avoid counting the same messages twice
+    results["overall"] = overall([c for c in results["channels"] if c["id"] != "ai"])
     json.dump(results, open(ASSETS / "results.json", "w", encoding="utf-8"), indent=2, ensure_ascii=False)
-    for c in results["channels"]:
-        h = c["headline"]
-        print(f"{c['name']:13s} P {h['precision']:.3f}  R/FDR {h['recall']:.3f}  Acc {h['accuracy']:.3f}  F1 {h['f1']:.3f}  FPR {h['fpr']:.4f}  N {h['n']}")
+    for name, h in [(c["name"], c["headline"]) for c in results["channels"]] + [("OVERALL", results["overall"])]:
+        print(f"{name:13s} P {h['precision']:.3f}  R/FDR {h['recall']:.3f}  Acc {h['accuracy']:.3f}  F1 {h['f1']:.3f}  FPR {h['fpr']:.4f}  N {h['n']}")
 
 
 if __name__ == "__main__":

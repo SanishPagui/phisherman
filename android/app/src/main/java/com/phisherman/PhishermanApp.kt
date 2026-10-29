@@ -19,6 +19,7 @@ class PhishermanApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        com.phisherman.ui.theme.AppSettings.load(this)  // light / dark / system and language, for every screen
         SmsNotifier.ensureChannel(this)
         // a listener enabled while the app was being updated can stay unbound; ask for a rebind
         if (MessageNotificationListener.isEnabled(this)) {

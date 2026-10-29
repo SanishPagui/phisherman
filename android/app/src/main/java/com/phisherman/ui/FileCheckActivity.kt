@@ -34,8 +34,21 @@ import com.phisherman.engine.Channel
 import com.phisherman.engine.Level
 import com.phisherman.engine.Reason
 import com.phisherman.engine.Verdict
-import com.phisherman.ui.theme.Brand
 import com.phisherman.ui.theme.PhishermanTheme
+import com.phisherman.ui.theme.tr
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Description
+import androidx.compose.material.icons.rounded.Lock
+import androidx.compose.material3.Icon
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.style.TextAlign
 import java.util.zip.ZipInputStream
 
 /**
@@ -109,22 +122,46 @@ object FileInspector {
 
 @androidx.compose.runtime.Composable
 private fun FileResult(r: FileCheck?, onDone: () -> Unit) {
-    val color = when (r?.verdict?.level) { Level.DANGEROUS -> Brand.Danger; Level.SUSPICIOUS -> Brand.Warn; Level.SAFE -> Brand.Safe; null -> Color.Gray }
+    val cs = MaterialTheme.colorScheme
+    val level = r?.verdict?.level ?: Level.SUSPICIOUS
+    val c = levelColors(level)
     Column(
-        Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).safeDrawingPadding().padding(20.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        Modifier.fillMaxSize().background(cs.background).safeDrawingPadding().verticalScroll(rememberScrollState())
+            .padding(horizontal = 20.dp),
+        verticalArrangement = Arrangement.spacedBy(14.dp),
     ) {
-        Text("File check", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
-        Card(shape = RoundedCornerShape(22.dp), colors = CardDefaults.cardColors(containerColor = color)) {
-            Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text(if (r == null) "Could not read this file" else r.title, color = Color.White, fontSize = 24.sp, fontWeight = FontWeight.Bold)
-                Text(r?.name ?: "", color = Color.White.copy(alpha = 0.85f))
-                Text(r?.detail ?: "Share the file to Phisherman again, or pick it from the home screen.", color = Color.White)
+        ScreenHeader(tr("File check", "फ़ाइल जाँच"), tr("We look inside the file, not just its name", "हम फ़ाइल के अंदर देखते हैं, सिर्फ़ नाम नहीं"))
+        Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(28.dp)).background(c.container).padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally) {
+            ShieldOrb(levelIcon(level), c.fg, size = 110.dp)
+            Spacer(Modifier.height(12.dp))
+            LevelBadge(level)
+            Spacer(Modifier.height(12.dp))
+            Text(if (r == null) tr("Could not read this file", "यह फ़ाइल पढ़ी नहीं जा सकी") else r.title,
+                style = MaterialTheme.typography.headlineSmall, color = c.onContainer, textAlign = TextAlign.Center)
+            if (r != null) {
+                Spacer(Modifier.height(6.dp))
+                Row(Modifier.clip(RoundedCornerShape(50)).background(cs.surface.copy(alpha = 0.6f)).padding(horizontal = 14.dp, vertical = 6.dp),
+                    verticalAlignment = Alignment.CenterVertically) {
+                    Icon(Icons.Rounded.Description, null, tint = c.onContainer, modifier = Modifier.size(16.dp))
+                    Spacer(Modifier.width(6.dp))
+                    Text(r.name, style = MaterialTheme.typography.labelLarge, color = c.onContainer, maxLines = 1)
+                }
+            }
+            Spacer(Modifier.height(12.dp))
+            Text(r?.detail ?: tr("Share the file to Phisherman again, or pick it from the home screen.",
+                "फ़ाइल फिर से Phisherman पर शेयर करें, या होम स्क्रीन से चुनें।"),
+                style = MaterialTheme.typography.bodyLarge, color = c.onContainer, textAlign = TextAlign.Center)
+        }
+        AppCard(padding = 16.dp) {
+            Row(verticalAlignment = Alignment.Top) {
+                IconTile(Icons.Rounded.Lock, cs.primary, size = 40.dp)
+                Text(tr("An app renamed to .pdf or .jpg is still caught. The file is checked on this phone and is not uploaded.",
+                    ".pdf या .jpg नाम दी गई ऐप भी पकड़ी जाती है। फ़ाइल इसी फ़ोन पर जाँची जाती है और अपलोड नहीं होती।"),
+                    style = MaterialTheme.typography.bodySmall, color = cs.onSurfaceVariant, modifier = Modifier.padding(start = 12.dp))
             }
         }
-        Text("Phisherman looks inside the file, not just at its name, so an app renamed to .pdf or .jpg is still caught. The file is checked on this phone and is not uploaded.",
-            style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        Button(onClick = onDone, modifier = Modifier.fillMaxWidth().height(52.dp), shape = RoundedCornerShape(16.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)) { Text("Done") }
+        GradientButton(tr("Done", "हो गया"), onDone)
+        Spacer(Modifier.height(12.dp))
     }
 }

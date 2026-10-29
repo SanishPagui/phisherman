@@ -7,6 +7,7 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
 import android.util.Log
+import com.phisherman.ui.theme.I18n
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
 import com.phisherman.voice.CallGuard
@@ -65,9 +66,9 @@ class ChatScreenReader : AccessibilityService() {
         if ("uninstall" in screen || "install" !in screen) return
         lastInstallerAlert = now
         Log.i(TAG, "package installer opened")
-        banner?.warn("⚠ Installing an app from outside the Play Store",
-            "Scammers send fake bank, KYC and \"support\" apps as files on WhatsApp, SMS or email.",
-            "If someone sent you this file, tap Cancel. Banks never ask you to install apps this way.",
+        banner?.warn(I18n.t("⚠ Installing an app from outside the Play Store"),
+            I18n.t("Scammers send fake bank, KYC and \"support\" apps as files on WhatsApp, SMS or email."),
+            I18n.t("If someone sent you this file, tap Cancel. Banks never ask you to install apps this way."),
             com.phisherman.engine.Level.DANGEROUS, null)
     }
 

@@ -19,6 +19,10 @@ object Prefs {
     fun autoCallGuard(ctx: Context): Boolean = sp(ctx).getBoolean("auto_call_guard", false)
     fun setAutoCallGuard(ctx: Context, on: Boolean) = sp(ctx).edit().putBoolean("auto_call_guard", on).apply()
 
+    /** SYSTEM, LIGHT or DARK (ui.theme.ThemeMode). */
+    fun themeMode(ctx: Context): String = sp(ctx).getString("theme_mode", "SYSTEM") ?: "SYSTEM"
+    fun setThemeMode(ctx: Context, mode: String) = sp(ctx).edit().putString("theme_mode", mode).apply()
+
     fun hindi(ctx: Context): Boolean = sp(ctx).getBoolean(KEY_HINDI, false)
     fun setHindi(ctx: Context, on: Boolean) = sp(ctx).edit().putBoolean(KEY_HINDI, on).apply()
 }

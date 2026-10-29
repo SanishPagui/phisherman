@@ -1,0 +1,61 @@
+label	sender	subject	body
+phishing	SBI Alerts	Unusual sign-in detected	We noticed a login from a new device. Verify your account within 24 hours or it will be suspended: http://sbi-secure-login.example/verify
+phishing	HDFC Bank	Your NetBanking is blocked	Your NetBanking access has been blocked due to incomplete KYC. Update your PAN and Aadhaar now at https://hdfc-kyc-update.example/login to avoid permanent closure.
+phishing	Income Tax Department	Refund of Rs 18,450 approved	You are eligible for an income tax refund. Submit your bank account and card details at http://incometax-refund.example/claim within 2 days.
+phishing	Amazon Support	Refund pending for your order	Your refund of Rs 4,999 is on hold. Confirm your card number and CVV here to receive it: https://amazon-refunds.example/confirm
+phishing	Netflix	Payment declined - update now	Your membership is on hold because your payment failed. Update your billing details today at http://netflix-billing.example/update or lose access.
+phishing	IT Helpdesk	Your mailbox is almost full	Your mailbox has exceeded its storage limit. Sign in to continue receiving email: http://mail-quota-upgrade.example/login
+phishing	Microsoft 365	Password expires today	Your Microsoft 365 password expires today. Keep your current password by verifying here: https://office365-keep-password.example/verify
+phishing	PhonePe Rewards	You won Rs 5,000 cashback	Congratulations! You have won Rs 5,000 cashback. Claim it before midnight: http://phonepe-cashback.example/claim
+phishing	India Post	Parcel held at customs	Your parcel could not be delivered. Pay a customs fee of Rs 49 at http://indiapost-redelivery.example/pay to release it today.
+phishing	ICICI Bank	Account suspended	Your ICICI account is suspended due to suspicious activity. Reactivate your account immediately at https://icici-reactivate.example/login
+phishing	Paytm KYC Team	KYC expiry notice	Your Paytm KYC expires today. Call our officer on 9123456780 or download the AnyDesk app to complete KYC.
+phishing	HR Department	Updated salary structure	Please review the attached salary revision letter. Open salary_revision.html and sign in with your email password to view it.
+phishing	DHL Express	Invoice for shipment	See attached invoice. Enable editing and enable macros in the attached document to view your shipment details.
+phishing	Google Security	Someone has your password	Someone just used your password. Secure your account now by entering your password at http://google-account-secure.example/recover
+phishing	Electricity Board	Power will be disconnected tonight	Your electricity bill is unpaid. Your power will be disconnected tonight at 9:30 pm. Pay now at http://bses-billpay.example/pay
+phishing	Customs Officer	Digital arrest warning	A parcel in your name contains illegal items. You are under digital arrest. Do not tell anyone and transfer the verification amount to the account given.
+phishing	Flipkart Lucky Draw	You are our lucky winner	You have won an iPhone 16 in our lucky draw. Pay the processing fee of Rs 999 at https://flipkart-luckydraw.example/claim to receive it.
+phishing	UIDAI	Aadhaar will be deactivated	Your Aadhaar will be deactivated in 24 hours. Update your biometric details at http://uidai-update.example/aadhaar immediately.
+phishing	Axis Bank	Credit card reward points expiring	Your 12,450 reward points expire today. Redeem now by entering your card details at https://axis-rewards.example/redeem
+phishing	Recruitment Team	Job offer - pay registration fee	Congratulations, you are selected for a work from home job. Pay the registration fee of Rs 2,500 to confirm your joining.
+phishing	Apple ID	Your Apple ID has been locked	Your Apple ID has been locked for security reasons. Unlock it here: http://appleid-unlock.example/signin
+phishing	SBI YONO	Install the new YONO app	Your YONO app will stop working. Download and install the new version from http://yono-update.example/yono.apk today.
+phishing	Paypal	Unusual activity on your account	We have limited your account. Confirm your identity and payment information at https://paypal-resolution.example/confirm
+phishing	Ministry of Finance	PM scheme benefit of Rs 6,000	You are eligible for a government benefit of Rs 6,000. Share your bank account details and the OTP you receive to get the payment.
+phishing	WhatsApp Support	Your WhatsApp will be banned	Your WhatsApp account will be banned in 12 hours. Verify your number at http://whatsapp-verify.example/now to keep using it.
+phishing	Kotak Bank	Confirm your debit card	Your debit card has been blocked. Reply with your card number, expiry date and PIN to unblock it.
+phishing	Airtel Billing	Final notice: SIM deactivation	Your SIM will be deactivated today due to pending KYC. Update KYC at https://airtel-kyc.example/update to avoid disconnection.
+phishing	LIC India	Policy bonus pending	Your policy bonus of Rs 32,000 is pending. Pay the release charge of Rs 1,200 at http://lic-bonus.example/release.
+phishing	Instagram	Copyright violation on your account	Your account will be deleted for copyright violation. Appeal within 24 hours by logging in at https://instagram-appeal.example/form
+phishing	Crypto Desk	Double your investment	Invest Rs 10,000 today and get Rs 20,000 in 7 days, guaranteed. Transfer now to the wallet below and send a screenshot.
+legit	HDFC Bank	Your account statement for October	Your e-statement for October is attached and password protected. For help, visit hdfcbank.com or call the number on the back of your card.
+legit	Amazon.in	Your order has shipped	Your order of boAt Airdopes has shipped and will arrive on Friday. Track your package in the Amazon app.
+legit	Swiggy	Your order is on the way	Your food from Meghana Foods is on the way. Your delivery partner Ravi will reach in 15 minutes.
+legit	SBI	OTP for your transaction	Your OTP for the online transaction of Rs 1,250 is 482913. Do not share this OTP with anyone. SBI never asks for it.
+legit	Google	Security alert: new sign-in on Windows	We noticed a new sign-in to your Google Account on a Windows device. If this was you, you don't need to do anything.
+legit	LinkedIn	You appeared in 12 searches this week	See who has been looking at your profile and grow your network. Open LinkedIn to view the details.
+legit	College Office	Mid-semester exam timetable	The mid-semester exam timetable for third year is attached. Exams start on 10 November. Contact the exam cell for any clash.
+legit	IRCTC	Booking confirmed - PNR 4521893370	Your ticket from Mumbai CSMT to Pune is confirmed. Coach B2, seat 34. Carry a valid ID while travelling.
+legit	Zomato	Rate your last order	How was your order from Behrouz Biryani? Tap to rate and help other foodies.
+legit	Netflix	New on Netflix this week	New movies and shows are waiting for you. Here is what is popular in India this week.
+legit	Rahul Sharma	Notes from yesterday's meeting	Hey, sharing the notes from the meeting yesterday. Let's catch up on Friday for lunch.
+legit	Priya Nair	Photos from the trip	Uploaded all the Goa trip photos to the shared album. Let me know which ones you want printed.
+legit	Flipkart	Your refund is processed	Your refund of Rs 799 for the returned item has been processed to your original payment method. It may take 3-5 days to show.
+legit	Uber	Your Thursday morning trip	Thanks for riding with Suresh. Your fare was Rs 214, paid by UPI.
+legit	Google Pay	You received Rs 500	Amit Kumar sent you Rs 500. The money is in your bank account.
+legit	Microsoft	Your monthly Microsoft 365 summary	Here is a summary of your OneDrive storage and recent activity this month.
+legit	Airtel	Your bill for October is ready	Your Airtel postpaid bill of Rs 499 is ready. Due date 15 November. Pay in the Airtel Thanks app.
+legit	GitHub	A new SSH key was added to your account	A new SSH key was added to your account. If you added this key, you can ignore this email.
+legit	Coursera	Your weekly learning summary	You completed 3 lessons in Machine Learning this week. Keep going to finish the course.
+legit	Mom	Dinner on Sunday	Come home on Sunday, I am making rajma chawal. Bring your laptop charger, you left it here.
+legit	HR Department	Holiday list for next year	Please find the holiday list for next year attached. Plan your leaves accordingly.
+legit	ICICI Bank	Credit card statement generated	Your credit card statement for October has been generated. Total due Rs 8,430, due on 18 November. Pay through the iMobile app.
+legit	Spotify	Your 2026 Wrapped is here	See your top songs and artists of the year. Open Spotify to listen.
+legit	BookMyShow	Booking confirmation	Your tickets for the 7 pm show at PVR Phoenix are confirmed. Show the QR code at the entrance.
+legit	Paytm	Electricity bill paid successfully	Your payment of Rs 1,340 to BSES Rajdhani is successful. Transaction ID 98231457.
+legit	LIC India	Premium due reminder	Your premium of Rs 4,200 is due on 25 November. Pay at licindia.in or at any LIC branch.
+legit	Apple	Your receipt from Apple	Receipt for your iCloud+ 50 GB plan, Rs 75 per month. View it in your Apple account settings.
+legit	Instagram	New login to your account	We noticed a new login from Android in Mumbai. If this was you, no action is needed.
+legit	Team Lead	Sprint review moved	The sprint review is moved to 4 pm tomorrow because the client call overlaps. Same meeting link.
+legit	Kotak Bank	Debit card dispatched	Your new debit card has been dispatched by courier and will reach you in 3-5 working days.

@@ -1,0 +1,213 @@
+channel	label	sender	text	py_level
+link	0		https://www.wikipedia.org/	SAFE
+link	0		https://en.wikipedia.org/wiki/Phishing	SAFE
+link	0		https://www.hdfcbank.com/	SAFE
+link	0		https://www.sbi.co.in/web/personal-banking	SAFE
+link	0		https://www.irctc.co.in/nget/train-search	SAFE
+link	0		https://github.com/login	SAFE
+link	0		https://www.amazon.in/gp/your-account/order-history?ref_=ya_d_c_yo	SAFE
+link	0		https://stackoverflow.com/questions/9444055/using-dns-to-redirect	SAFE
+link	0		https://www.rmit.edu.au/	SAFE
+link	0		https://docs.python.org/3/library/urllib.parse.html	SAFE
+link	1		https://examplebank-kyc-update.example/login	DANGEROUS
+link	1		http://203.0.113.10/verify/account	DANGEROUS
+link	1		https://examplebank.com@login-check.example/	DANGEROUS
+link	1		https://login.secure.examplebank.com.attacker.example/	DANGEROUS
+link	1		https://paytrn.example/	SUSPICIOUS
+link	1		https://hdfc-netbanking-secure.example/update/kyc?id=99812	DANGEROUS
+link	1		http://sbi-reward-points.xyz/claim/otp	SUSPICIOUS
+link	1		https://icici-verify.top/account/suspend	DANGEROUS
+link	1		http://free-refund-incometax.icu/refund?pan=ABCDE1234F	SUSPICIOUS
+link	1		https://phonepe-cashback.click/bonus/reward	DANGEROUS
+link	0		https://retail.onlinesbi.sbi/retail/login.htm	SAFE
+link	0		https://www.onlinesbi.sbi/	SAFE
+link	0		https://netbanking.hdfcbank.com/netbanking/	SAFE
+link	0		https://infinity.icicibank.com/corp/AuthenticationController?FORMSGROUP_ID__=AuthenticationFG&__START_TRAN_FLAG__=Y&FG_BUTTONS__=LOAD&ACTION.LOAD=Y&AuthenticationFG.LOGIN_FLAG=1&BANK_ID=ICI	SAFE
+link	0		https://omni.axisbank.co.in/axisretailbanking/	SAFE
+link	0		https://netbanking.kotak.com/knb2/	SAFE
+link	0		https://eportal.incometax.gov.in/iec/foservices/#/login	SAFE
+link	0		https://myaadhaar.uidai.gov.in/	SAFE
+link	0		https://www.digilocker.gov.in/	SAFE
+link	0		https://unifiedportal-mem.epfindia.gov.in/memberinterface/	SAFE
+link	0		https://cybercrime.gov.in/Webform/Accept.aspx	SAFE
+link	0		https://services.gst.gov.in/services/login	SAFE
+link	0		https://parivahan.gov.in/rcdlstatus/?pur_cd=101	SAFE
+link	0		https://www.npci.org.in/what-we-do/upi/product-overview	SAFE
+link	0		https://accounts.google.com/v3/signin/identifier?continue=https%3A%2F%2Fmail.google.com%2Fmail%2F&service=mail&flowName=GlifWebSignIn	SAFE
+link	0		https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=4765445b-32c6-49b0-83e6-1d93765276ca&response_type=code&scope=openid	SAFE
+link	0		https://www.amazon.in/ap/signin?openid.pape.max_auth_age=0&openid.return_to=https%3A%2F%2Fwww.amazon.in%2F	SAFE
+link	0		https://www.flipkart.com/account/login?ret=/	SAFE
+link	0		https://www.linkedin.com/login?fromSignIn=true&trk=guest_homepage-basic_nav-header-signin	SAFE
+link	0		https://github.com/login?return_to=%2Fsettings%2Fsecurity	SAFE
+link	0		https://web.whatsapp.com/	SAFE
+link	0		https://paytm.com/recharge	SAFE
+link	0		https://www.phonepe.com/business-solutions/payment-gateway/	SAFE
+link	0		https://pay.google.com/about/	SAFE
+link	0		https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=PL1234567890&index=3	SAFE
+link	0		https://www.google.com/maps/search/railway+station+near+connaught+place+new+delhi/@28.6315,77.2167,15z?entry=ttu	SAFE
+link	0		https://docs.google.com/forms/d/e/1FAIpQLSf_example_form_id_1234567890/viewform?usp=sf_link	SAFE
+link	0		https://kite.zerodha.com/connect/login?v=3&api_key=kitefront	SAFE
+link	0		https://www.nseindia.com/get-quotes/equity?symbol=INFY	SAFE
+link	0		https://www.moneycontrol.com/india/stockpricequote/computers-software/infosys/IT	SAFE
+link	0		https://www.makemytrip.com/flights/	SAFE
+link	0		https://in.bookmyshow.com/explore/home/mumbai	SAFE
+link	0		https://www.hotstar.com/in/home	SAFE
+link	0		https://www.zomato.com/ncr/restaurants	SAFE
+link	0		https://www.swiggy.com/restaurants	SAFE
+link	0		https://www.indiapost.gov.in/VAS/Pages/IndiaPostHome.aspx	SAFE
+link	0		https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx?prid=57890	SAFE
+link	0		https://update-kyc.sbi.co.in/	SAFE
+link	0		https://secure.hdfcbank.com/login/verify	SAFE
+link	1		https://bit.ly/example	SUSPICIOUS
+message	0	AD-HDFCBK	EMI of Rs 12,450 for loan a/c XX5678 is due on 05-Nov. Please maintain sufficient balance. HDFC Bank	SAFE
+message	1	9090909090	Dear consumer, your electricity connection will be cut today due to pending bill. Pay now: http://power-bill-pay.example	DANGEROUS
+message	1	9889012346	PM Kisan: Rs 6000 installment is pending. Update your bank details at http://pmkisan-update.example	SUSPICIOUS
+message	0	VM-MEESHO	Meesho Mega Blockbuster Sale: Products starting at Rs 49. Shop on the Meesho app	SAFE
+message	0	9876520000	New song is out https://open.spotify.com/track/4uLU6hMCjMI75M1A2tKUQC	SAFE
+message	0	9876507777	कल सुबह 10 बजे डॉक्टर के पास चलना है, याद रखना	SAFE
+message	0	VK-BIGBSK	bigbasket: Get fresh fruits and vegetables delivered in 30 mins. Use code FRESH50	SAFE
+message	1	9890123458	Scholarship of Rs 48,000 approved for you. Pay registration fee Rs 499 at http://scholarship-portal.example	SUSPICIOUS
+message	1	9801234560	Aapka loan approve ho gaya hai. Processing fee Rs 500 turant bhejiye is UPI ID par: loanhelp@ybl	SUSPICIOUS
+message	0	AD-ZERODH	Open a free demat account with Zerodha in 10 minutes. Visit zerodha.com	SAFE
+message	0	AD-POLBZR	Compare and buy term insurance plans on Policybazaar. Plans starting Rs 490/month	SAFE
+message	1	8080808080	Bijli ka bill pending hai, aaj raat connection kat jayega. Turant is number par call karein 9876501234	DANGEROUS
+message	0	VM-ZOMATO	Weekend special: Free delivery on orders above Rs 199. Order now on Zomato	SAFE
+message	0	9876501111	Mummy main ghar 8 baje tak aa jaunga, khana bana ke rakhna	SAFE
+message	1	9834567892	Amazon: You won an iPhone 15 in our lucky draw. Pay Rs 99 delivery charge to claim: http://amazon-luckydraw.example	SUSPICIOUS
+message	0	VM-AIRTEL	Unlimited 5G data with Airtel Rs 399 plan. Recharge on Airtel Thanks app.	SAFE
+message	0	VM-KFCIND	KFC Bucket deal: 8 pc chicken at Rs 499 today only. Order on the KFC app.	SAFE
+message	0	AD-BIGBZR	Diwali Dhamaka Sale! Extra 20% off on groceries this week at your nearest store.	SAFE
+message	0	VM-ICICIB	Your ICICI Bank FD of Rs 1,00,000 has been renewed for 1 year at 7.1% p.a.	SAFE
+message	1	7766554433	Electricity bill unpaid. Your power will be disconnected tonight at 9.30 pm. Call electricity officer 9812345670 immediately	DANGEROUS
+message	1	9901234567	Your account is blocked. Please send the OTP you received to this number to unblock it	DANGEROUS
+message	0	AD-SWIGGY	Hungry? Get 60% off up to Rs 120 on your next order. Use code TRYNEW. Order on Swiggy	SAFE
+message	0	AD-SBICRD	Shop with SBI Card this festive season and get 10% instant discount on Amazon. T&C apply	SAFE
+message	1	9812345679	Work from home opportunity. Earn 3000-8000 per day. No investment. Click http://easy-earn.example to register	SUSPICIOUS
+message	1	9878901236	Dear Customer, Your ICICI account has been temporarily locked. Click here to unlock: http://icici-unlock.example/verify	SUSPICIOUS
+message	0	AD-IRCTCI	PNR 4512367890, Train 12951, 28-10-26, SL S5 34. Chart prepared. Happy journey - IRCTC	SAFE
+message	0	VM-SBIINB	Your SBI credit card statement for Oct is ready. Total due Rs 8,230. Due date 15-Nov. Pay via YONO or onlinesbi.sbi	SAFE
+message	0	9876505555	Reached office safely. Will call you during lunch.	SAFE
+message	1	9856789014	IRCTC refund of Rs 1,450 is pending. Enter your card details to receive refund http://irctc-refund.example	DANGEROUS
+message	0	VK-AMAZON	Your Amazon order #405-1234567 has been delivered. Thank you for shopping with us.	SAFE
+message	0	VM-PVRCIN	Watch the latest blockbuster this Friday! Book tickets at pvrcinemas.com and get 10% cashback	SAFE
+message	1	9845678904	Hi mom, I lost my phone, this is my new number. Please send Rs 15,000 urgently to this UPI, will explain later	SUSPICIOUS
+message	1	+918765432109	HDFC Bank: Your netbanking is suspended due to incomplete KYC. Verify now at hdfc-verify.example to avoid permanent block	DANGEROUS
+message	1	9678901234	Income Tax Dept: You are eligible for a refund of Rs 15,490. Submit your account details at http://itr-refund.example	SUSPICIOUS
+message	1	9988776655	आपका खाता आज बंद हो जाएगा। तुरंत KYC अपडेट करें: http://bank-kyc.example/update	DANGEROUS
+message	0	9812300000	Didi, aapka parcel neeche guard ke paas rakh diya hai	SUSPICIOUS
+message	0	AD-CULTFT	Join cult.fit this month and get 2 extra months free. Visit cult.fit	SAFE
+message	1	9801234561	Dear customer, KYC verification pending. Your SIM will stop working. Click http://sim-kyc.example and enter Aadhaar number	DANGEROUS
+message	0	VM-URBNCL	Get your home deep cleaned before Diwali. Flat 15% off on Urban Company app.	SAFE
+message	0	9876521111	Wifi password is in this note, also see github.com/torvalds/linux	SAFE
+message	1	9834567890	To activate your KYC download the app from http://kyc-support.example/kyc.apk and enter your details	DANGEROUS
+message	0	AD-SHOPKR	धमाका सेल! सभी मोबाइल पर 40% तक की छूट। आज ही खरीदें	SAFE
+message	0	9876517777	https://en.wikipedia.org/wiki/Gravity_Falls	SAFE
+message	0	9876512222	Papa ki dawai khatam ho gayi hai, wapas aate time le aana	SAFE
+message	0	JD-ICICIB	Your OTP for ICICI Bank NetBanking is 773201. Never share OTP with anyone including bank staff.	SAFE
+message	0	AD-SBIINB	Your KYC has been updated successfully. No further action is needed. - SBI	SAFE
+message	1	9878901237	Customs duty of Rs 3,500 is pending for your international parcel. Pay at http://customs-clear.example within 24 hours	DANGEROUS
+message	0	VK-EPFOHO	Dear member, Rs 3,600 contribution for Sep 2026 credited to your PF account. EPFO	SAFE
+message	1	+91 98450 12345	Hi mom, I lost my phone, this is my new number. Please send Rs 15,000 urgently to this UPI, will explain later	SUSPICIOUS
+message	1	+91 70123 45678	Papa ye mera naya number hai, purana phone kharab ho gaya. Abhi 20,000 bhej do please, emergency hai, ghar aake batata hoon	SUSPICIOUS
+message	1	+91 81234 56789	Them: Hi beta, kaise ho? || You: Who is this? || Them: Arre main tumhara mama, naya number hai. Ek kaam tha || Them: Hospital mein hoon, card nahi chal raha. 30,000 Google Pay kar do, kal wapas kar dunga	SAFE
+message	1	+91 99876 54321	Bhaiya main Riya, mera phone chori ho gaya. Is number pe paise bhej do, college fees aaj last date hai	SAFE
+message	1	+91 98765 11111	This is CEO Rajesh Mehta. I am in a board meeting and cannot talk. I need you to buy 10 Amazon gift cards of Rs 5,000 each for a client. Send me the codes quickly and keep this confidential	SAFE
+message	1	+91 99887 22222	Them: Hi, are you at your desk? || You: Yes sir || Them: I need a small favour, I am stuck in a meeting. Please transfer Rs 2,40,000 to our new vendor account today. Details below. Don't discuss with finance, I will sign later	SAFE
+message	1	Accounts Team <finance-dept@vendor-mail.example>	Dear Sir, please note our bank account has changed due to an audit. Kindly make all pending invoice payments to the new account below from today. Treat this as urgent	SUSPICIOUS
+message	1	IT Helpdesk	Your company mailbox will be deactivated in 24 hours due to a security upgrade. Reply with your employee ID and password to keep access	DANGEROUS
+message	1	+91 90000 33333	Them: Hello, IT support from your office. We noticed a virus on your laptop || Them: Please install AnyDesk and share the 9 digit code so I can fix it remotely || You: Is this urgent? || Them: Yes, otherwise your data will be deleted today	DANGEROUS
+message	1	+91 91234 00000	Your bank app needs an update. Our executive will help you. Download QuickSupport from Play Store and share the code shown	DANGEROUS
+message	1	Priya HR	Them: Hi! We are hiring for part time online work, earn 3000 to 8000 daily || Them: Just like YouTube videos and send screenshots || Them: First task is free. For the VIP task you need to deposit Rs 5,000, you will get 8,000 back in 1 hour	SUSPICIOUS
+message	1	+44 7700 900123	Join our stock market tips group. Our members made 300% returns this month. Invest Rs 10,000 today on our trading app and withdraw profits daily	SUSPICIOUS
+message	1	crypto.queen.official	Them: Hey dear, I saw your profile. I trade crypto and make good money || Them: I can teach you, it's easy. Start with just 20k on this platform || Them: Trust me, I will guide you. Many people already doubled their money	SAFE
+message	1	amazon.giveaway.india	Congratulations! You are selected as the lucky winner of our iPhone giveaway. Pay Rs 499 delivery charge to receive your prize	DANGEROUS
+message	1	+92 300 1234567	KBC Lucky Draw: Aapka number 25 lakh ki lottery mein select hua hai. Prize lene ke liye Rana Pratap se WhatsApp call par baat karein aur processing fee bhejein	SUSPICIOUS
+message	1	+91 98123 98123	Your account will be blocked. Reply with your ATM PIN and card number to keep it active	DANGEROUS
+message	1	instagram.support.team	Your Instagram account has been reported for copyright violation. Verify your account within 24 hours by sending your login password or it will be deleted	SUSPICIOUS
+message	1	+91 87654 32100	Them: Hi, I accidentally sent my verification code to your number || Them: Can you please forward the 6 digit code you just received? || Them: Please, it's urgent	SAFE
+message	1	+91 76543 21098	TRAI notice: Your mobile number will be disconnected within 2 hours due to illegal activity. Press 9 to talk to our officer	DANGEROUS
+message	1	Income Tax Department <noreply@incometax-refund.example>	You have an outstanding tax demand. Failure to pay within 24 hours will result in legal action and account freeze. Pay now using the link	SUSPICIOUS
+message	1	+91 70707 70707	Hello sir, I am army officer posted in Kashmir, want to buy your sofa listed on OLX. I will pay advance. Please scan the QR code I send to receive the money	SAFE
+message	1	+91 95555 44444	Them: Sir I want to buy your bike from OLX || Them: I will send money through UPI || Them: I have sent a request, just enter your UPI PIN to receive 25,000	DANGEROUS
+message	1	+91 93333 22222	Do not tell anyone about this conversation. Your account is under RBI investigation. Transfer all your balance to the safe account I give you to protect it	SUSPICIOUS
+message	1	+91 92222 11111	Dear customer, your electricity KYC is pending. Call our officer on 9876543210 immediately to avoid disconnection	DANGEROUS
+message	1	+91 94444 66666	Main SBI branch manager bol raha hoon. Aapke account mein suspicious transaction hua hai. Account safe rakhne ke liye mujhe apni netbanking details bhejiye	SUSPICIOUS
+message	1	Loan Help Desk	Instant loan without CIBIL check. Rs 2 lakh approved. Pay Rs 1,999 insurance fee first to release the amount	SUSPICIOUS
+message	0	Mummy	Beta khana kha liya? Aaj papa jaldi aa rahe hain	SAFE
+message	0	Rahul	Bro send me 500 for the pizza, I paid for everyone. My UPI is the same as last time	SAFE
+message	0	Papa	Them: Beta college fees ki last date kab hai? || You: 30 tareekh papa || Them: Theek hai, main kal transfer kar dunga. Receipt bhej dena	SAFE
+message	0	Sanjay (Manager)	Them: Hi, did the vendor invoice for October come? || You: Yes, approved by finance || Them: Great, please process it through the usual payment system by Friday	SAFE
+message	0	Priya (HR)	Reminder: please submit your investment declarations on the HR portal by 30 November	SAFE
+message	0	Swiggy	Your order from Domino's has been delivered. Rate your experience	SAFE
+message	0	AD-HDFCBK	482913 is your OTP for login. Do not share it with anyone. HDFC Bank never asks for your OTP	SAFE
+message	0	Indian Overseas Bank	Your A/c XX4321 is credited with Rs 12,000 on 28-10-2026 by NEFT. Available balance Rs 45,230. - IOB	SUSPICIOUS
+message	0	VM-SBIINB	Rs 2,500 debited from A/c XX7788 on 28Oct26 at Amazon. If not done by you, call 1800 1234 from your registered mobile. - SBI	SAFE
+message	0	aarav_23	Them: Bro did you see the new Gravity Falls episode? || You: Not yet || Them: Watch it, the ending is crazy lol	SAFE
+message	0	neha.sharma	Happy birthday!! Party at my place on Saturday?	SAFE
+message	0	Class Group	Assignment 3 deadline extended to Monday. Submit on the college portal	SAFE
+message	0	Office Admin	Team, salary for October has been credited. Payslips are available on the HR portal	SAFE
+message	0	IRCTC	Your ticket is booked. PNR 4512367890, Train 12951, 2 Nov. Happy journey	SUSPICIOUS
+message	0	myntra	Big Fashion Days are live! Up to 70% off on top brands	SAFE
+message	0	Zomato	Flat 50% off on your next 3 orders this weekend. Order now	SUSPICIOUS
+message	0	Ankit	Can you share the OTP you got? Just kidding, never share OTPs haha. Anyway see you at 6	DANGEROUS
+message	0	Didi	Them: Ghar ka wifi ka bill bhar diya? || You: Haan kal bhara || Them: Ok thanks, mujhe 600 bhej de apne share ka	SAFE
+email	1	SBI Alerts	Unusual sign-in detected. We noticed a login from a new device. Verify your account within 24 hours or it will be suspended: http://sbi-secure-login.example/verify	DANGEROUS
+email	1	HDFC Bank	Your NetBanking is blocked. Your NetBanking access has been blocked due to incomplete KYC. Update your PAN and Aadhaar now at https://hdfc-kyc-update.example/login to avoid permanent closure.	DANGEROUS
+email	1	Income Tax Department	Refund of Rs 18,450 approved. You are eligible for an income tax refund. Submit your bank account and card details at http://incometax-refund.example/claim within 2 days.	SUSPICIOUS
+email	1	Amazon Support	Refund pending for your order. Your refund of Rs 4,999 is on hold. Confirm your card number and CVV here to receive it: https://amazon-refunds.example/confirm	DANGEROUS
+email	1	Netflix	Payment declined - update now. Your membership is on hold because your payment failed. Update your billing details today at http://netflix-billing.example/update or lose access.	SUSPICIOUS
+email	1	IT Helpdesk	Your mailbox is almost full. Your mailbox has exceeded its storage limit. Sign in to continue receiving email: http://mail-quota-upgrade.example/login	SUSPICIOUS
+email	1	Microsoft 365	Password expires today. Your Microsoft 365 password expires today. Keep your current password by verifying here: https://office365-keep-password.example/verify	DANGEROUS
+email	1	PhonePe Rewards	You won Rs 5,000 cashback. Congratulations! You have won Rs 5,000 cashback. Claim it before midnight: http://phonepe-cashback.example/claim	DANGEROUS
+email	1	India Post	Parcel held at customs. Your parcel could not be delivered. Pay a customs fee of Rs 49 at http://indiapost-redelivery.example/pay to release it today.	SUSPICIOUS
+email	1	ICICI Bank	Account suspended. Your ICICI account is suspended due to suspicious activity. Reactivate your account immediately at https://icici-reactivate.example/login	DANGEROUS
+email	1	Paytm KYC Team	KYC expiry notice. Your Paytm KYC expires today. Call our officer on 9123456780 or download the AnyDesk app to complete KYC.	DANGEROUS
+email	1	HR Department	Updated salary structure. Please review the attached salary revision letter. Open salary_revision.html and sign in with your email password to view it.	SAFE
+email	1	DHL Express	Invoice for shipment. See attached invoice. Enable editing and enable macros in the attached document to view your shipment details.	SAFE
+email	1	Google Security	Someone has your password. Someone just used your password. Secure your account now by entering your password at http://google-account-secure.example/recover	DANGEROUS
+email	1	Electricity Board	Power will be disconnected tonight. Your electricity bill is unpaid. Your power will be disconnected tonight at 9:30 pm. Pay now at http://bses-billpay.example/pay	SUSPICIOUS
+email	1	Customs Officer	Digital arrest warning. A parcel in your name contains illegal items. You are under digital arrest. Do not tell anyone and transfer the verification amount to the account given.	SUSPICIOUS
+email	1	Flipkart Lucky Draw	You are our lucky winner. You have won an iPhone 16 in our lucky draw. Pay the processing fee of Rs 999 at https://flipkart-luckydraw.example/claim to receive it.	DANGEROUS
+email	1	UIDAI	Aadhaar will be deactivated. Your Aadhaar will be deactivated in 24 hours. Update your biometric details at http://uidai-update.example/aadhaar immediately.	DANGEROUS
+email	1	Axis Bank	Credit card reward points expiring. Your 12,450 reward points expire today. Redeem now by entering your card details at https://axis-rewards.example/redeem	DANGEROUS
+email	1	Recruitment Team	Job offer - pay registration fee. Congratulations, you are selected for a work from home job. Pay the registration fee of Rs 2,500 to confirm your joining.	DANGEROUS
+email	1	Apple ID	Your Apple ID has been locked. Your Apple ID has been locked for security reasons. Unlock it here: http://appleid-unlock.example/signin	SAFE
+email	1	SBI YONO	Install the new YONO app. Your YONO app will stop working. Download and install the new version from http://yono-update.example/yono.apk today.	DANGEROUS
+email	1	Paypal	Unusual activity on your account. We have limited your account. Confirm your identity and payment information at https://paypal-resolution.example/confirm	DANGEROUS
+email	1	Ministry of Finance	PM scheme benefit of Rs 6,000. You are eligible for a government benefit of Rs 6,000. Share your bank account details and the OTP you receive to get the payment.	DANGEROUS
+email	1	WhatsApp Support	Your WhatsApp will be banned. Your WhatsApp account will be banned in 12 hours. Verify your number at http://whatsapp-verify.example/now to keep using it.	SUSPICIOUS
+email	1	Kotak Bank	Confirm your debit card. Your debit card has been blocked. Reply with your card number, expiry date and PIN to unblock it.	DANGEROUS
+email	1	Airtel Billing	Final notice: SIM deactivation. Your SIM will be deactivated today due to pending KYC. Update KYC at https://airtel-kyc.example/update to avoid disconnection.	DANGEROUS
+email	1	LIC India	Policy bonus pending. Your policy bonus of Rs 32,000 is pending. Pay the release charge of Rs 1,200 at http://lic-bonus.example/release.	SUSPICIOUS
+email	1	Instagram	Copyright violation on your account. Your account will be deleted for copyright violation. Appeal within 24 hours by logging in at https://instagram-appeal.example/form	SUSPICIOUS
+email	1	Crypto Desk	Double your investment. Invest Rs 10,000 today and get Rs 20,000 in 7 days, guaranteed. Transfer now to the wallet below and send a screenshot.	DANGEROUS
+email	0	HDFC Bank	Your account statement for October. Your e-statement for October is attached and password protected. For help, visit hdfcbank.com or call the number on the back of your card.	SUSPICIOUS
+email	0	Amazon.in	Your order has shipped. Your order of boAt Airdopes has shipped and will arrive on Friday. Track your package in the Amazon app.	SAFE
+email	0	Swiggy	Your order is on the way. Your food from Meghana Foods is on the way. Your delivery partner Ravi will reach in 15 minutes.	SAFE
+email	0	SBI	OTP for your transaction. Your OTP for the online transaction of Rs 1,250 is 482913. Do not share this OTP with anyone. SBI never asks for it.	SUSPICIOUS
+email	0	Google	Security alert: new sign-in on Windows. We noticed a new sign-in to your Google Account on a Windows device. If this was you, you don't need to do anything.	SUSPICIOUS
+email	0	LinkedIn	You appeared in 12 searches this week. See who has been looking at your profile and grow your network. Open LinkedIn to view the details.	SUSPICIOUS
+email	0	College Office	Mid-semester exam timetable. The mid-semester exam timetable for third year is attached. Exams start on 10 November. Contact the exam cell for any clash.	SAFE
+email	0	IRCTC	Booking confirmed - PNR 4521893370. Your ticket from Mumbai CSMT to Pune is confirmed. Coach B2, seat 34. Carry a valid ID while travelling.	SAFE
+email	0	Zomato	Rate your last order. How was your order from Behrouz Biryani? Tap to rate and help other foodies.	SAFE
+email	0	Netflix	New on Netflix this week. New movies and shows are waiting for you. Here is what is popular in India this week.	SUSPICIOUS
+email	0	Rahul Sharma	Notes from yesterday's meeting. Hey, sharing the notes from the meeting yesterday. Let's catch up on Friday for lunch.	SAFE
+email	0	Priya Nair	Photos from the trip. Uploaded all the Goa trip photos to the shared album. Let me know which ones you want printed.	SAFE
+email	0	Flipkart	Your refund is processed. Your refund of Rs 799 for the returned item has been processed to your original payment method. It may take 3-5 days to show.	SAFE
+email	0	Uber	Your Thursday morning trip. Thanks for riding with Suresh. Your fare was Rs 214, paid by UPI.	SAFE
+email	0	Google Pay	You received Rs 500. Amit Kumar sent you Rs 500. The money is in your bank account.	SUSPICIOUS
+email	0	Microsoft	Your monthly Microsoft 365 summary. Here is a summary of your OneDrive storage and recent activity this month.	SAFE
+email	0	Airtel	Your bill for October is ready. Your Airtel postpaid bill of Rs 499 is ready. Due date 15 November. Pay in the Airtel Thanks app.	SAFE
+email	0	GitHub	A new SSH key was added to your account. A new SSH key was added to your account. If you added this key, you can ignore this email.	SUSPICIOUS
+email	0	Coursera	Your weekly learning summary. You completed 3 lessons in Machine Learning this week. Keep going to finish the course.	SAFE
+email	0	Mom	Dinner on Sunday. Come home on Sunday, I am making rajma chawal. Bring your laptop charger, you left it here.	SAFE
+email	0	HR Department	Holiday list for next year. Please find the holiday list for next year attached. Plan your leaves accordingly.	SAFE
+email	0	ICICI Bank	Credit card statement generated. Your credit card statement for October has been generated. Total due Rs 8,430, due on 18 November. Pay through the iMobile app.	SAFE
+email	0	Spotify	Your 2026 Wrapped is here. See your top songs and artists of the year. Open Spotify to listen.	SUSPICIOUS
+email	0	BookMyShow	Booking confirmation. Your tickets for the 7 pm show at PVR Phoenix are confirmed. Show the QR code at the entrance.	SAFE
+email	0	Paytm	Electricity bill paid successfully. Your payment of Rs 1,340 to BSES Rajdhani is successful. Transaction ID 98231457.	SAFE
+email	0	LIC India	Premium due reminder. Your premium of Rs 4,200 is due on 25 November. Pay at licindia.in or at any LIC branch.	SAFE
+email	0	Apple	Your receipt from Apple. Receipt for your iCloud+ 50 GB plan, Rs 75 per month. View it in your Apple account settings.	SUSPICIOUS
+email	0	Instagram	New login to your account. We noticed a new login from Android in Mumbai. If this was you, no action is needed.	SUSPICIOUS
+email	0	Team Lead	Sprint review moved. The sprint review is moved to 4 pm tomorrow because the client call overlaps. Same meeting link.	SAFE
+email	0	Kotak Bank	Debit card dispatched. Your new debit card has been dispatched by courier and will reach you in 3-5 working days.	SAFE

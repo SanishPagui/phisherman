@@ -1,0 +1,481 @@
+{
+  "generated": "2026-10-29",
+  "dataset": "ml/email_test.tsv: 30 phishing + 30 genuine emails, hand-written, synthetic",
+  "engine": {
+    "alert": {
+      "tp": 27,
+      "fp": 10,
+      "fn": 3,
+      "tn": 20
+    },
+    "red": {
+      "tp": 18,
+      "fp": 0,
+      "fn": 12,
+      "tn": 30
+    }
+  },
+  "rows": [
+    {
+      "label": "phishing",
+      "sender": "SBI Alerts",
+      "subject": "Unusual sign-in detected",
+      "level": "DANGEROUS",
+      "hits": [
+        "R_URGENT_LINK"
+      ]
+    },
+    {
+      "label": "phishing",
+      "sender": "HDFC Bank",
+      "subject": "Your NetBanking is blocked",
+      "level": "DANGEROUS",
+      "hits": [
+        "R_URGENT_LINK",
+        "R_BRAND_LINK"
+      ]
+    },
+    {
+      "label": "phishing",
+      "sender": "Income Tax Department",
+      "subject": "Refund of Rs 18,450 approved",
+      "level": "SUSPICIOUS",
+      "hits": []
+    },
+    {
+      "label": "phishing",
+      "sender": "Amazon Support",
+      "subject": "Refund pending for your order",
+      "level": "DANGEROUS",
+      "hits": [
+        "LINK"
+      ]
+    },
+    {
+      "label": "phishing",
+      "sender": "Netflix",
+      "subject": "Payment declined - update now",
+      "level": "SUSPICIOUS",
+      "hits": [
+        "R_URGENT_LINK"
+      ]
+    },
+    {
+      "label": "phishing",
+      "sender": "IT Helpdesk",
+      "subject": "Your mailbox is almost full",
+      "level": "SUSPICIOUS",
+      "hits": [
+        "LINK"
+      ]
+    },
+    {
+      "label": "phishing",
+      "sender": "Microsoft 365",
+      "subject": "Password expires today",
+      "level": "DANGEROUS",
+      "hits": [
+        "R_URGENT_LINK",
+        "LINK"
+      ]
+    },
+    {
+      "label": "phishing",
+      "sender": "PhonePe Rewards",
+      "subject": "You won Rs 5,000 cashback",
+      "level": "DANGEROUS",
+      "hits": []
+    },
+    {
+      "label": "phishing",
+      "sender": "India Post",
+      "subject": "Parcel held at customs",
+      "level": "SUSPICIOUS",
+      "hits": [
+        "R_URGENT_LINK"
+      ]
+    },
+    {
+      "label": "phishing",
+      "sender": "ICICI Bank",
+      "subject": "Account suspended",
+      "level": "DANGEROUS",
+      "hits": [
+        "R_URGENT_LINK",
+        "R_BRAND_LINK"
+      ]
+    },
+    {
+      "label": "phishing",
+      "sender": "Paytm KYC Team",
+      "subject": "KYC expiry notice",
+      "level": "DANGEROUS",
+      "hits": [
+        "R_APP_INSTALL"
+      ]
+    },
+    {
+      "label": "phishing",
+      "sender": "HR Department",
+      "subject": "Updated salary structure",
+      "level": "SAFE",
+      "hits": []
+    },
+    {
+      "label": "phishing",
+      "sender": "DHL Express",
+      "subject": "Invoice for shipment",
+      "level": "SAFE",
+      "hits": []
+    },
+    {
+      "label": "phishing",
+      "sender": "Google Security",
+      "subject": "Someone has your password",
+      "level": "DANGEROUS",
+      "hits": [
+        "LINK"
+      ]
+    },
+    {
+      "label": "phishing",
+      "sender": "Electricity Board",
+      "subject": "Power will be disconnected tonight",
+      "level": "SUSPICIOUS",
+      "hits": [
+        "R_URGENT_LINK"
+      ]
+    },
+    {
+      "label": "phishing",
+      "sender": "Customs Officer",
+      "subject": "Digital arrest warning",
+      "level": "SUSPICIOUS",
+      "hits": []
+    },
+    {
+      "label": "phishing",
+      "sender": "Flipkart Lucky Draw",
+      "subject": "You are our lucky winner",
+      "level": "DANGEROUS",
+      "hits": []
+    },
+    {
+      "label": "phishing",
+      "sender": "UIDAI",
+      "subject": "Aadhaar will be deactivated",
+      "level": "DANGEROUS",
+      "hits": [
+        "R_URGENT_LINK",
+        "R_BRAND_LINK"
+      ]
+    },
+    {
+      "label": "phishing",
+      "sender": "Axis Bank",
+      "subject": "Credit card reward points expiring",
+      "level": "DANGEROUS",
+      "hits": [
+        "R_URGENT_LINK"
+      ]
+    },
+    {
+      "label": "phishing",
+      "sender": "Recruitment Team",
+      "subject": "Job offer - pay registration fee",
+      "level": "DANGEROUS",
+      "hits": []
+    },
+    {
+      "label": "phishing",
+      "sender": "Apple ID",
+      "subject": "Your Apple ID has been locked",
+      "level": "SAFE",
+      "hits": []
+    },
+    {
+      "label": "phishing",
+      "sender": "SBI YONO",
+      "subject": "Install the new YONO app",
+      "level": "DANGEROUS",
+      "hits": [
+        "R_URGENT_LINK",
+        "R_APP_INSTALL"
+      ]
+    },
+    {
+      "label": "phishing",
+      "sender": "Paypal",
+      "subject": "Unusual activity on your account",
+      "level": "DANGEROUS",
+      "hits": []
+    },
+    {
+      "label": "phishing",
+      "sender": "Ministry of Finance",
+      "subject": "PM scheme benefit of Rs 6,000",
+      "level": "DANGEROUS",
+      "hits": [
+        "R_OTP_ASK"
+      ]
+    },
+    {
+      "label": "phishing",
+      "sender": "WhatsApp Support",
+      "subject": "Your WhatsApp will be banned",
+      "level": "SUSPICIOUS",
+      "hits": []
+    },
+    {
+      "label": "phishing",
+      "sender": "Kotak Bank",
+      "subject": "Confirm your debit card",
+      "level": "DANGEROUS",
+      "hits": [
+        "R_OTP_ASK"
+      ]
+    },
+    {
+      "label": "phishing",
+      "sender": "Airtel Billing",
+      "subject": "Final notice: SIM deactivation",
+      "level": "DANGEROUS",
+      "hits": [
+        "R_URGENT_LINK"
+      ]
+    },
+    {
+      "label": "phishing",
+      "sender": "LIC India",
+      "subject": "Policy bonus pending",
+      "level": "SUSPICIOUS",
+      "hits": []
+    },
+    {
+      "label": "phishing",
+      "sender": "Instagram",
+      "subject": "Copyright violation on your account",
+      "level": "SUSPICIOUS",
+      "hits": [
+        "R_URGENT_LINK"
+      ]
+    },
+    {
+      "label": "phishing",
+      "sender": "Crypto Desk",
+      "subject": "Double your investment",
+      "level": "DANGEROUS",
+      "hits": []
+    },
+    {
+      "label": "legit",
+      "sender": "HDFC Bank",
+      "subject": "Your account statement for October",
+      "level": "SUSPICIOUS",
+      "hits": []
+    },
+    {
+      "label": "legit",
+      "sender": "Amazon.in",
+      "subject": "Your order has shipped",
+      "level": "SAFE",
+      "hits": []
+    },
+    {
+      "label": "legit",
+      "sender": "Swiggy",
+      "subject": "Your order is on the way",
+      "level": "SAFE",
+      "hits": []
+    },
+    {
+      "label": "legit",
+      "sender": "SBI",
+      "subject": "OTP for your transaction",
+      "level": "SUSPICIOUS",
+      "hits": []
+    },
+    {
+      "label": "legit",
+      "sender": "Google",
+      "subject": "Security alert: new sign-in on Windows",
+      "level": "SUSPICIOUS",
+      "hits": []
+    },
+    {
+      "label": "legit",
+      "sender": "LinkedIn",
+      "subject": "You appeared in 12 searches this week",
+      "level": "SUSPICIOUS",
+      "hits": []
+    },
+    {
+      "label": "legit",
+      "sender": "College Office",
+      "subject": "Mid-semester exam timetable",
+      "level": "SAFE",
+      "hits": []
+    },
+    {
+      "label": "legit",
+      "sender": "IRCTC",
+      "subject": "Booking confirmed - PNR 4521893370",
+      "level": "SAFE",
+      "hits": []
+    },
+    {
+      "label": "legit",
+      "sender": "Zomato",
+      "subject": "Rate your last order",
+      "level": "SAFE",
+      "hits": []
+    },
+    {
+      "label": "legit",
+      "sender": "Netflix",
+      "subject": "New on Netflix this week",
+      "level": "SUSPICIOUS",
+      "hits": []
+    },
+    {
+      "label": "legit",
+      "sender": "Rahul Sharma",
+      "subject": "Notes from yesterday's meeting",
+      "level": "SAFE",
+      "hits": []
+    },
+    {
+      "label": "legit",
+      "sender": "Priya Nair",
+      "subject": "Photos from the trip",
+      "level": "SAFE",
+      "hits": []
+    },
+    {
+      "label": "legit",
+      "sender": "Flipkart",
+      "subject": "Your refund is processed",
+      "level": "SAFE",
+      "hits": []
+    },
+    {
+      "label": "legit",
+      "sender": "Uber",
+      "subject": "Your Thursday morning trip",
+      "level": "SAFE",
+      "hits": []
+    },
+    {
+      "label": "legit",
+      "sender": "Google Pay",
+      "subject": "You received Rs 500",
+      "level": "SUSPICIOUS",
+      "hits": []
+    },
+    {
+      "label": "legit",
+      "sender": "Microsoft",
+      "subject": "Your monthly Microsoft 365 summary",
+      "level": "SAFE",
+      "hits": []
+    },
+    {
+      "label": "legit",
+      "sender": "Airtel",
+      "subject": "Your bill for October is ready",
+      "level": "SAFE",
+      "hits": []
+    },
+    {
+      "label": "legit",
+      "sender": "GitHub",
+      "subject": "A new SSH key was added to your account",
+      "level": "SUSPICIOUS",
+      "hits": []
+    },
+    {
+      "label": "legit",
+      "sender": "Coursera",
+      "subject": "Your weekly learning summary",
+      "level": "SAFE",
+      "hits": []
+    },
+    {
+      "label": "legit",
+      "sender": "Mom",
+      "subject": "Dinner on Sunday",
+      "level": "SAFE",
+      "hits": []
+    },
+    {
+      "label": "legit",
+      "sender": "HR Department",
+      "subject": "Holiday list for next year",
+      "level": "SAFE",
+      "hits": []
+    },
+    {
+      "label": "legit",
+      "sender": "ICICI Bank",
+      "subject": "Credit card statement generated",
+      "level": "SAFE",
+      "hits": []
+    },
+    {
+      "label": "legit",
+      "sender": "Spotify",
+      "subject": "Your 2026 Wrapped is here",
+      "level": "SUSPICIOUS",
+      "hits": []
+    },
+    {
+      "label": "legit",
+      "sender": "BookMyShow",
+      "subject": "Booking confirmation",
+      "level": "SAFE",
+      "hits": []
+    },
+    {
+      "label": "legit",
+      "sender": "Paytm",
+      "subject": "Electricity bill paid successfully",
+      "level": "SAFE",
+      "hits": []
+    },
+    {
+      "label": "legit",
+      "sender": "LIC India",
+      "subject": "Premium due reminder",
+      "level": "SAFE",
+      "hits": []
+    },
+    {
+      "label": "legit",
+      "sender": "Apple",
+      "subject": "Your receipt from Apple",
+      "level": "SUSPICIOUS",
+      "hits": []
+    },
+    {
+      "label": "legit",
+      "sender": "Instagram",
+      "subject": "New login to your account",
+      "level": "SUSPICIOUS",
+      "hits": []
+    },
+    {
+      "label": "legit",
+      "sender": "Team Lead",
+      "subject": "Sprint review moved",
+      "level": "SAFE",
+      "hits": []
+    },
+    {
+      "label": "legit",
+      "sender": "Kotak Bank",
+      "subject": "Debit card dispatched",
+      "level": "SAFE",
+      "hits": []
+    }
+  ]
+}
